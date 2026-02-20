@@ -119,7 +119,7 @@
     color: var(--muted);
   }
 
-  main {
+  main, .resort-grid {
     position: relative;
     z-index: 1;
     max-width: 980px;
@@ -138,14 +138,9 @@
     overflow: hidden;
     transition: box-shadow 0.2s ease, transform 0.2s ease;
     animation: fadeUp 0.5s ease both;
-    cursor: grab;
-    user-select: none;
   }
 
   .resort:hover { box-shadow: 0 8px 28px rgba(30,95,163,0.11); transform: translateY(-2px); }
-  .resort:active { cursor: grabbing; }
-  .resort.dragging { opacity: 0.35; box-shadow: none !important; transform: none !important; }
-  .resort.drag-over { box-shadow: 0 0 0 2px var(--blue), 0 8px 24px rgba(30,95,163,0.15) !important; transform: none !important; }
   .resort.new-resort { animation: fadeUp 0.4s ease both; }
 
   @keyframes fadeUp {
@@ -268,7 +263,6 @@
     flex-shrink: 0;
     transition: background 0.2s;
   }
-  .resort:hover .rank-num { background: var(--blue); }
 
   .resort-name-row {
     display: flex;
@@ -464,12 +458,76 @@
 
   @media (max-width: 640px) {
     header { padding: 36px 20px 28px; }
-    main { padding: 24px 16px 100px; grid-template-columns: 1fr; }
+    main, .resort-grid { padding: 24px 16px 100px; grid-template-columns: 1fr; }
     .resort-header { padding: 18px 18px 14px; }
     .visits { padding: 4px 18px 0; }
     .add-visit-btn { margin: 8px 18px 14px; width: calc(100% - 36px); }
     .drag-hint { padding: 0 20px; }
     .fab { bottom: 20px; right: 20px; padding: 12px 18px; }
+  }
+
+  /* ── Tabs ── */
+  .tabs-bar {
+    position: relative;
+    z-index: 1;
+    max-width: 980px;
+    margin: 0 auto;
+    padding: 0 40px;
+    display: flex;
+    gap: 4px;
+    border-bottom: 2px solid var(--ice);
+    margin-top: 24px;
+  }
+
+  .tab-btn {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--muted);
+    background: none;
+    border: none;
+    padding: 12px 20px;
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    margin-bottom: -2px;
+    transition: color 0.15s, border-color 0.15s;
+    white-space: nowrap;
+  }
+  .tab-btn:hover { color: var(--ink); }
+  .tab-btn.active { color: var(--blue); border-bottom-color: var(--blue); font-weight: 600; }
+
+  .tab-panel { display: none; }
+  .tab-panel.active { display: contents; }
+
+  .tab-stats {
+    position: relative;
+    z-index: 1;
+    max-width: 980px;
+    margin: 0 auto;
+    padding: 10px 40px 0;
+    display: flex;
+    gap: 16px;
+    align-items: center;
+  }
+
+  .tab-stat {
+    font-size: 12px;
+    color: var(--muted);
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+
+  .tab-stat-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--blue);
+  }
+
+  .tab-stat-sep {
+    color: var(--ice);
+    font-size: 14px;
   }
 </style>
 </head>
@@ -478,22 +536,29 @@
 <header>
   <div class="header-inner">
     <div>
-      <div class="tagline">❄ Personal Ski Journal</div>
-      <h1>On the <em>Mountain</em></h1>
+      <h1>Ski Resort <em>Rankings</em></h1>
     </div>
     <div class="header-stats">
-      <div class="stat"><div class="stat-num" id="resort-count">22</div><div class="stat-label">Resorts</div></div>
-      <div class="stat"><div class="stat-num" id="days-count">27+</div><div class="stat-label">Days</div></div>
-      <div class="stat"><div class="stat-num" id="yes-count">—</div><div class="stat-label">Would Return</div></div>
+      <div class="stat"><div class="stat-num" id="resort-count">—</div><div class="stat-label">Resorts</div></div>
+      <div class="stat"><div class="stat-num" id="days-count">—</div><div class="stat-label">Days</div></div>
     </div>
   </div>
 </header>
 
-<div class="drag-hint">⠿ Drag cards to reorder rankings</div>
+<div class="tabs-bar">
+  <button class="tab-btn active" data-tab="east">East Coast</button>
+  <button class="tab-btn" data-tab="midwest">Midwest</button>
+  <button class="tab-btn" data-tab="west">West Coast</button>
+</div>
 
-<main id="resort-grid">
 
-  <div class="resort" data-return="yes" data-visits="1">
+<div class="tab-stats">
+  <div class="tab-stat"><span class="tab-stat-num" id="tab-resort-count">—</span> resorts on this list</div>
+</div>
+
+<div id="tab-east" class="tab-panel active">
+<main id="resort-grid-east" class="resort-grid">
+<div class="resort" data-return="yes" data-visits="1">
     <div class="resort-header">
       <div class="resort-name">Saddleback Mountain</div>
       <div class="resort-meta"><div class="visit-count">1 visit</div></div>
@@ -895,10 +960,20 @@
     </div></div>
     <button class="add-visit-btn">＋ Add visit</button>
   </div>
-
 </main>
+</div>
 
-<footer>❄ &nbsp; Ski Journal &nbsp; ❄ &nbsp; Northeast &amp; Beyond</footer>
+<div id="tab-midwest" class="tab-panel">
+<main id="resort-grid-midwest" class="resort-grid">
+</main>
+</div>
+
+<div id="tab-west" class="tab-panel">
+<main id="resort-grid-west" class="resort-grid">
+</main>
+</div>
+
+<footer>❄ &nbsp; Ski Resort Rankings</footer>
 
 <!-- FAB -->
 <button class="fab" id="new-resort-btn">
@@ -924,6 +999,10 @@
         <div class="field-label">Notes</div>
         <textarea class="field-textarea" id="visit-notes" placeholder="Conditions, highlights, what stood out…"></textarea>
         <div class="field-hint">Each line will become a separate note bullet.</div>
+      </div>
+      <div class="field-group">
+        <div class="field-label">Update Rank <span style="font-weight:400;text-transform:none;letter-spacing:0;color:var(--muted);font-size:11px;">(optional — leave blank to keep current)</span></div>
+        <input class="field-input" id="visit-rank" type="number" min="1" placeholder="e.g. 3" />
       </div>
     </div>
     <div class="modal-footer">
@@ -970,10 +1049,25 @@
   const API_KEY = '$2a$10$8QkRFjrZ/xlhurcr6itn2OmILf4WvAOJL.asFOI73CEK90.vUoC0G';
   const BIN_URL = `https://api.jsonbin.io/v3/b/${BIN_ID}`;
 
-  const grid = document.getElementById('resort-grid');
-  let saveTimeout = null;
+  const REGIONS = ['east', 'midwest', 'west'];
+  let activeRegion = 'east';
 
-  // ── Show a subtle save indicator ─────────────────────────
+  // ── Tab switching ─────────────────────────────────────────
+  document.querySelectorAll('.tab-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      activeRegion = btn.dataset.tab;
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.toggle('active', b === btn));
+      document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+      document.getElementById(`tab-${activeRegion}`).classList.add('active');
+      updateStats();
+    });
+  });
+
+  function currentGrid() {
+    return document.getElementById(`resort-grid-${activeRegion}`);
+  }
+
+  // ── Save indicator ────────────────────────────────────────
   const saveIndicator = document.createElement('div');
   saveIndicator.id = 'save-indicator';
   saveIndicator.style.cssText = `
@@ -990,15 +1084,14 @@
     saveIndicator.style.opacity = '1';
     setTimeout(() => saveIndicator.style.opacity = '0', 2000);
   }
-
   function showSaving() {
     saveIndicator.style.background = '#1e5fa3';
     saveIndicator.textContent = '↑ Saving…';
     saveIndicator.style.opacity = '1';
   }
 
-  // ── Serialize DOM to data ─────────────────────────────────
-  function readDOM() {
+  // ── Serialize ─────────────────────────────────────────────
+  function readGrid(grid) {
     return Array.from(grid.querySelectorAll('.resort')).map(card => {
       const name = card.querySelector('.resort-name').textContent.trim();
       const returnVal = card.dataset.return || 'yes';
@@ -1015,32 +1108,29 @@
     });
   }
 
-  // ── Save to JSONBin (debounced) ───────────────────────────
+  function readAllData() {
+    return {
+      east:    readGrid(document.getElementById('resort-grid-east')),
+      midwest: readGrid(document.getElementById('resort-grid-midwest')),
+      west:    readGrid(document.getElementById('resort-grid-west'))
+    };
+  }
+
+  // ── Save to JSONBin ───────────────────────────────────────
+  let saveTimeout = null;
   function save() {
     clearTimeout(saveTimeout);
     showSaving();
     saveTimeout = setTimeout(async () => {
       try {
-        const data = readDOM();
-        const res = await fetch(`${BIN_URL}`, {
+        const res = await fetch(BIN_URL, {
           method: 'PUT',
-          headers: {
-            'Content-Type': 'application/json',
-            'X-Master-Key': API_KEY
-          },
-          body: JSON.stringify({ resorts: data })
+          headers: { 'Content-Type': 'application/json', 'X-Master-Key': API_KEY },
+          body: JSON.stringify({ resorts: readAllData() })
         });
-        if (res.ok) {
-          saveIndicator.style.background = '#2e8b57';
-          showSaved('✓ Saved');
-        } else {
-          saveIndicator.style.background = '#e05c2a';
-          showSaved('Save failed');
-        }
-      } catch(e) {
-        saveIndicator.style.background = '#e05c2a';
-        showSaved('Offline — not saved');
-      }
+        if (res.ok) { saveIndicator.style.background = '#2e8b57'; showSaved('✓ Saved'); }
+        else { saveIndicator.style.background = '#e05c2a'; showSaved('Save failed'); }
+      } catch(e) { saveIndicator.style.background = '#e05c2a'; showSaved('Offline — not saved'); }
     }, 800);
   }
 
@@ -1052,8 +1142,10 @@
       });
       if (!res.ok) return null;
       const json = await res.json();
-      const resorts = json.record?.resorts;
-      return Array.isArray(resorts) && resorts.length > 0 ? resorts : null;
+      const r = json.record?.resorts;
+      if (r && !Array.isArray(r)) return r;
+      if (Array.isArray(r) && r.length > 0) return { east: r, midwest: [], west: [] };
+      return null;
     } catch(e) { return null; }
   }
 
@@ -1084,23 +1176,27 @@
     return card;
   }
 
-  function renderAll(data) {
+  function renderGrid(grid, data) {
     grid.innerHTML = '';
     data.forEach(resort => {
       const card = buildCard(resort);
       grid.appendChild(card);
       addRankBadge(card);
-      enableDrag(card);
+      enableRankEdit(card);
       card.querySelector('.add-visit-btn').addEventListener('click', e => {
         e.stopPropagation();
         openVisitModal(card);
       });
     });
-    updateRanks();
+    updateRanks(grid);
   }
 
   // ── Rank numbers ──────────────────────────────────────────
-  function updateRanks() {
+  function updateRanks(grid) {
+    if (!grid) {
+      REGIONS.forEach(r => updateRanks(document.getElementById(`resort-grid-${r}`)));
+      return;
+    }
     Array.from(grid.querySelectorAll('.resort')).forEach((r, i) => {
       const el = r.querySelector('.rank-num');
       if (el) el.textContent = i + 1;
@@ -1122,67 +1218,75 @@
 
   // ── Stats ─────────────────────────────────────────────────
   function updateStats() {
-    const all = grid.querySelectorAll('.resort');
-    document.getElementById('resort-count').textContent = all.length;
-    document.getElementById('yes-count').textContent =
-      Array.from(all).filter(r => r.dataset.return === 'yes').length;
+    let totalResorts = 0, totalVisits = 0;
+    REGIONS.forEach(r => {
+      const g = document.getElementById(`resort-grid-${r}`);
+      Array.from(g.querySelectorAll('.resort')).forEach(card => {
+        totalResorts++;
+        totalVisits += card.querySelectorAll('.visit').length;
+      });
+    });
+    document.getElementById('resort-count').textContent = totalResorts;
+    document.getElementById('days-count').textContent = totalVisits;
+
+    const tabCountEl = document.getElementById('tab-resort-count');
+    if (tabCountEl) {
+      tabCountEl.textContent = document.getElementById(`resort-grid-${activeRegion}`)
+        .querySelectorAll('.resort').length;
+    }
   }
 
-  // ── Bootstrap: load from cloud, fall back to baked-in HTML ─
+  // ── Bootstrap ─────────────────────────────────────────────
+  function wireCard(card) {
+    addRankBadge(card);
+    enableRankEdit(card);
+    card.querySelector('.add-visit-btn').addEventListener('click', e => {
+      e.stopPropagation();
+      openVisitModal(card);
+    });
+  }
+
+  // Step 1: Always wire up baked-in HTML as the source of truth
+  REGIONS.forEach(r => {
+    const g = document.getElementById(`resort-grid-${r}`);
+    Array.from(g.querySelectorAll('.resort')).forEach(wireCard);
+    updateRanks(g);
+  });
+  updateStats();
+
+  // Step 2: Check cloud — only use cloud data for a region if it has >= as many
+  // resorts as the HTML (meaning user has made changes/additions). 
+  // If cloud has fewer, the HTML is newer — push it up.
   (async () => {
     const cloudData = await loadCloud();
+    let needsResave = false;
+
     if (cloudData) {
-      renderAll(cloudData);
-    } else {
-      // First run — wire up the baked-in HTML cards and save them to cloud
-      Array.from(grid.querySelectorAll('.resort')).forEach(card => {
-        addRankBadge(card);
-        enableDrag(card);
-        card.querySelector('.add-visit-btn').addEventListener('click', e => {
-          e.stopPropagation();
-          openVisitModal(card);
-        });
+      REGIONS.forEach(r => {
+        const htmlResorts = Array.from(
+          document.getElementById(`resort-grid-${r}`).querySelectorAll('.resort')
+        ).length;
+        const cloudResorts = (cloudData[r] || []).length;
+
+        if (cloudResorts >= htmlResorts && cloudResorts > 0) {
+          // Cloud is up to date or has user additions — use it
+          renderGrid(document.getElementById(`resort-grid-${r}`), cloudData[r]);
+        } else {
+          // HTML has more resorts than cloud — HTML is the newer source
+          needsResave = true;
+        }
       });
-      updateRanks();
-      save(); // push initial data to cloud
+    } else {
+      needsResave = true;
     }
+
+    if (needsResave) save();
+    updateStats();
   })();
 
-  // ── Drag & drop ───────────────────────────────────────────
-  let dragSrc = null;
-
-  function enableDrag(card) {
-    card.setAttribute('draggable', 'true');
-    card.addEventListener('dragstart', e => {
-      dragSrc = card;
-      setTimeout(() => card.classList.add('dragging'), 0);
-      e.dataTransfer.effectAllowed = 'move';
-    });
-    card.addEventListener('dragend', () => {
-      card.classList.remove('dragging');
-      grid.querySelectorAll('.resort').forEach(r => r.classList.remove('drag-over'));
-      updateRanks();
-      save();
-    });
-    card.addEventListener('dragover', e => {
-      e.preventDefault();
-      if (card !== dragSrc) {
-        grid.querySelectorAll('.resort').forEach(r => r.classList.remove('drag-over'));
-        card.classList.add('drag-over');
-      }
-    });
-    card.addEventListener('dragleave', () => card.classList.remove('drag-over'));
-    card.addEventListener('drop', e => {
-      e.preventDefault();
-      if (dragSrc && dragSrc !== card) {
-        const all = Array.from(grid.querySelectorAll('.resort'));
-        if (all.indexOf(dragSrc) < all.indexOf(card)) grid.insertBefore(dragSrc, card.nextSibling);
-        else grid.insertBefore(dragSrc, card);
-        updateRanks();
-        save();
-      }
-      card.classList.remove('drag-over');
-    });
+  // ── Click-to-edit rank numbers ────────────────────────────
+  function enableRankEdit(card) {
+    // Rank is now display-only; changed via the Add Visit modal
   }
 
   // ── Visit count helper ────────────────────────────────────
@@ -1207,6 +1311,9 @@
     visitSubtitle.textContent = card.querySelector('.resort-name').textContent;
     visitDateIn.value = '';
     visitNotesIn.value = '';
+    document.getElementById('visit-rank').value = '';
+    const currentRank = card.querySelector('.rank-num') ? card.querySelector('.rank-num').textContent.trim() : '';
+    document.getElementById('visit-rank').placeholder = `Current rank: ${currentRank}`;
     visitModal.classList.add('open');
     visitDateIn.focus();
   }
@@ -1221,7 +1328,10 @@
     if (!targetCard) return;
     const dateVal  = visitDateIn.value.trim();
     const notesVal = visitNotesIn.value.trim();
+    const rankVal  = parseInt(document.getElementById('visit-rank').value);
     if (!dateVal && !notesVal) { closeVisitModal(); return; }
+
+    // Add the visit
     const visitsContainer = targetCard.querySelector('.visits');
     const visitEl = document.createElement('div');
     visitEl.className = 'visit';
@@ -1240,6 +1350,20 @@
     visitEl.appendChild(notesEl);
     visitsContainer.appendChild(visitEl);
     refreshVisitCount(targetCard);
+
+    // Apply new rank if provided
+    if (!isNaN(rankVal) && rankVal >= 1) {
+      const grid = targetCard.closest('.resort-grid');
+      const all = Array.from(grid.querySelectorAll('.resort'));
+      const total = all.length;
+      const clampedRank = Math.min(rankVal, total);
+      grid.removeChild(targetCard);
+      const updated = Array.from(grid.querySelectorAll('.resort'));
+      if (clampedRank - 1 >= updated.length) grid.appendChild(targetCard);
+      else grid.insertBefore(targetCard, updated[clampedRank - 1]);
+      updateRanks(grid);
+    }
+
     closeVisitModal();
     save();
   });
@@ -1287,10 +1411,11 @@
       </div></div>
       <button class="add-visit-btn">＋ Add visit</button>
     `;
+    const grid = currentGrid();
     grid.appendChild(card);
     addRankBadge(card);
-    enableDrag(card);
-    updateRanks();
+    enableRankEdit(card);
+    updateRanks(grid);
     card.querySelector('.add-visit-btn').addEventListener('click', e => {
       e.stopPropagation();
       openVisitModal(card);
