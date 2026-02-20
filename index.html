@@ -126,7 +126,7 @@
     margin: 0 auto;
     padding: 28px 40px 100px;
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(420px, 1fr));
+    grid-template-columns: 1fr;
     gap: 20px;
     align-items: start;
   }
@@ -291,16 +291,22 @@
   }
   .add-visit-btn:hover { background: rgba(30,95,163,0.1); border-color: var(--blue); }
 
-  /* FAB */
-  .fab {
+  /* FABs */
+  .fab-group {
     position: fixed;
     bottom: 32px;
     right: 32px;
     z-index: 100;
     display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 10px;
+  }
+
+  .fab {
+    display: flex;
     align-items: center;
     gap: 8px;
-    background: var(--blue);
     color: white;
     border: none;
     border-radius: 28px;
@@ -309,10 +315,22 @@
     font-weight: 600;
     font-family: 'DM Sans', sans-serif;
     cursor: pointer;
-    box-shadow: 0 4px 20px rgba(30,95,163,0.4);
     transition: all 0.2s ease;
   }
-  .fab:hover { background: #1a4f8a; transform: translateY(-2px); box-shadow: 0 6px 28px rgba(30,95,163,0.5); }
+
+  .fab-primary {
+    background: var(--blue);
+    box-shadow: 0 4px 20px rgba(30,95,163,0.4);
+  }
+  .fab-primary:hover { background: #1a4f8a; transform: translateY(-2px); box-shadow: 0 6px 28px rgba(30,95,163,0.5); }
+
+  .fab-secondary {
+    background: var(--ink);
+    box-shadow: 0 4px 16px rgba(26,28,46,0.25);
+    font-size: 12px;
+    padding: 10px 18px;
+  }
+  .fab-secondary:hover { background: #2e3050; transform: translateY(-2px); }
 
   /* Modal */
   .modal-overlay {
@@ -463,7 +481,8 @@
     .visits { padding: 4px 18px 0; }
     .add-visit-btn { margin: 8px 18px 14px; width: calc(100% - 36px); }
     .drag-hint { padding: 0 20px; }
-    .fab { bottom: 20px; right: 20px; padding: 12px 18px; }
+    .fab-group { bottom: 20px; right: 20px; }
+    .fab { padding: 12px 18px; }
   }
 
   /* ── Tabs ── */
@@ -965,20 +984,1145 @@
 
 <div id="tab-midwest" class="tab-panel">
 <main id="resort-grid-midwest" class="resort-grid">
+  <div class="resort" data-return="yes" data-visits="1">
+    <div class="resort-header">
+      <div class="resort-name">Mt Bohemia</div>
+      <div class="resort-meta"><div class="visit-count">1 visit</div></div>
+    </div>
+    <div class="visits"><div class="visit">
+      <div class="visit-date">1 Day · January 2025</div>
+      <div class="notes">
+        <div class="note hl">Super cool, super rugged place. No grooming and almost all tree skiing.</div>
+        <div class="note">Some of it can be gnarly but a lot is very approachable.</div>
+        <div class="note good">Lots of super light fresh snow and nobody there. Lots of potato trees.</div>
+      </div>
+    </div></div>
+    <button class="add-visit-btn">＋ Add visit</button>
+  </div>
+
+  <div class="resort" data-return="yes" data-visits="2">
+    <div class="resort-header">
+      <div class="resort-name">Snowshoe</div>
+      <div class="resort-meta"><div class="visit-count">2 visits</div></div>
+    </div>
+    <div class="visits">
+      <div class="visit">
+        <div class="visit-date">3 Days · 2019</div>
+        <div class="notes">
+          <div class="note hl">First visit.</div>
+        </div>
+      </div>
+      <div class="visit">
+        <div class="visit-date">1 Day · January 2024</div>
+        <div class="notes">
+          <div class="note hl">Cold but good conditions. Not too crowded. Silver Creek section was great.</div>
+        </div>
+      </div>
+    </div>
+    <button class="add-visit-btn">＋ Add visit</button>
+  </div>
+
+  <div class="resort" data-return="yes" data-visits="1">
+    <div class="resort-header">
+      <div class="resort-name">Nubs Nob</div>
+      <div class="resort-meta"><div class="visit-count">1 visit</div></div>
+    </div>
+    <div class="visits"><div class="visit">
+      <div class="visit-date">3 Days</div>
+      <div class="notes">
+        <div class="note hl">Colored lifts and good vibes.</div>
+      </div>
+    </div></div>
+    <button class="add-visit-btn">＋ Add visit</button>
+  </div>
+
+  <div class="resort" data-return="yes" data-visits="2">
+    <div class="resort-header">
+      <div class="resort-name">Holiday Valley</div>
+      <div class="resort-meta"><div class="visit-count">2 visits</div></div>
+    </div>
+    <div class="visits">
+      <div class="visit">
+        <div class="visit-date">3 Days · Previous visits</div>
+        <div class="notes">
+          <div class="note hl">Multiple previous visits.</div>
+        </div>
+      </div>
+      <div class="visit">
+        <div class="visit-date">1 Day · February 2026</div>
+        <div class="notes">
+          <div class="note hl">First time with mountain totally open. Got a little snow the night before so trees were pretty good.</div>
+        </div>
+      </div>
+    </div>
+    <button class="add-visit-btn">＋ Add visit</button>
+  </div>
+
+  <div class="resort" data-return="yes" data-visits="3">
+    <div class="resort-header">
+      <div class="resort-name">Canaan Valley</div>
+      <div class="resort-meta"><div class="visit-count">3 visits</div></div>
+    </div>
+    <div class="visits">
+      <div class="visit">
+        <div class="visit-date">1 Day · February 2023</div>
+        <div class="notes">
+          <div class="note hl">Good vertical and pretty big. Almost nobody there but only ~5 trails open. Very slow lift.</div>
+        </div>
+      </div>
+      <div class="visit">
+        <div class="visit-date">1 Day · January 2024</div>
+        <div class="notes">
+          <div class="note hl">Mostly open with lots of fresh snow. Some cool wooded runs and glades with real deep snow.</div>
+          <div class="note">Still nobody there. Still slow lift.</div>
+        </div>
+      </div>
+      <div class="visit">
+        <div class="visit-date">1 Day · February 2026</div>
+        <div class="notes">
+          <div class="note hl">Very cold and windy Saturday. Everything was open. Got 6 inches of fresh snow.</div>
+          <div class="note good">Trees were great. Very few people.</div>
+          <div class="note bad">Still slow lifts.</div>
+        </div>
+      </div>
+    </div>
+    <button class="add-visit-btn">＋ Add visit</button>
+  </div>
+
+  <div class="resort" data-return="yes" data-visits="1">
+    <div class="resort-header">
+      <div class="resort-name">Marquette Mountain</div>
+      <div class="resort-meta"><div class="visit-count">1 visit</div></div>
+    </div>
+    <div class="visits"><div class="visit">
+      <div class="visit-date">2 Days · January 2025</div>
+      <div class="notes">
+        <div class="note hl">Super cold but almost totally empty both days. Showed up at noon and still had totally untracked groomers.</div>
+        <div class="note good">Groomers were awesome. Skis and feels taller than it is.</div>
+      </div>
+    </div></div>
+    <button class="add-visit-btn">＋ Add visit</button>
+  </div>
+
+  <div class="resort" data-return="yes" data-visits="1">
+    <div class="resort-header">
+      <div class="resort-name">Mt Ripley</div>
+      <div class="resort-meta"><div class="visit-count">1 visit</div></div>
+    </div>
+    <div class="visits"><div class="visit">
+      <div class="visit-date">1 Day · January 2025</div>
+      <div class="notes">
+        <div class="note hl">Fresh powder and snowing while skiing. Skied a lap off the back side and got totally fresh untracked powder.</div>
+        <div class="note">Kinda rolly poly fall lines with some flats. Ditch of doom. Cool city mountain.</div>
+      </div>
+    </div></div>
+    <button class="add-visit-btn">＋ Add visit</button>
+  </div>
+
+  <div class="resort" data-return="yes" data-visits="2">
+    <div class="resort-header">
+      <div class="resort-name">Caberfae Peaks</div>
+      <div class="resort-meta"><div class="visit-count">2 visits</div></div>
+    </div>
+    <div class="visits">
+      <div class="visit">
+        <div class="visit-date">1 Day · January 2021</div>
+        <div class="notes">
+          <div class="note hl">Pretty great terrain for the Midwest. Very mom and pop.</div>
+        </div>
+      </div>
+      <div class="visit">
+        <div class="visit-date">1 Day · February 2024</div>
+        <div class="notes">
+          <div class="note hl">Beautiful day, good groomers to start but got icy. Very nice little place. Not too crowded for a Saturday.</div>
+          <div class="note bad">Could be a death trap if it was really crowded.</div>
+        </div>
+      </div>
+    </div>
+    <button class="add-visit-btn">＋ Add visit</button>
+  </div>
+
+  <div class="resort" data-return="yes" data-visits="1">
+    <div class="resort-header">
+      <div class="resort-name">Massanutten</div>
+      <div class="resort-meta"><div class="visit-count">1 visit</div></div>
+    </div>
+    <div class="visits"><div class="visit">
+      <div class="visit-date">1 Day · December 2025</div>
+      <div class="notes">
+        <div class="note hl">Spring style skiing, warm and sunny. Coverage was actually quite good with most of the mountain open.</div>
+        <div class="note">Place is really nice with great snowmaking and good lifts. Felt pretty big for only really having two lifts.</div>
+        <div class="note bad">Jerry's everywhere, lift ops was bad.</div>
+      </div>
+    </div></div>
+    <button class="add-visit-btn">＋ Add visit</button>
+  </div>
+
+  <div class="resort" data-return="maybe" data-visits="1">
+    <div class="resort-header">
+      <div class="resort-name">Seven Springs</div>
+      <div class="resort-meta"><div class="visit-count">1 visit</div></div>
+    </div>
+    <div class="visits"><div class="visit">
+      <div class="visit-date">2 Days</div>
+      <div class="notes">
+        <div class="note bad">Terrible weather both times.</div>
+      </div>
+    </div></div>
+    <button class="add-visit-btn">＋ Add visit</button>
+  </div>
+
+  <div class="resort" data-return="yes" data-visits="1">
+    <div class="resort-header">
+      <div class="resort-name">Timberline Mountain</div>
+      <div class="resort-meta"><div class="visit-count">1 visit</div></div>
+    </div>
+    <div class="visits"><div class="visit">
+      <div class="visit-date">1 Day · January 2024</div>
+      <div class="notes">
+        <div class="note hl">100% open, good groomer runs and a lot of vert. Really nice lift.</div>
+        <div class="note bad">Super cold. A little crowded. Lift stopped all the time. Need to thin and clear glades.</div>
+      </div>
+    </div></div>
+    <button class="add-visit-btn">＋ Add visit</button>
+  </div>
+
+  <div class="resort" data-return="yes" data-visits="1">
+    <div class="resort-header">
+      <div class="resort-name">Peek n Peak</div>
+      <div class="resort-meta"><div class="visit-count">1 visit</div></div>
+    </div>
+    <div class="visits"><div class="visit">
+      <div class="visit-date">4 Days</div>
+      <div class="notes">
+        <div class="note hl">4 days total.</div>
+      </div>
+    </div></div>
+    <button class="add-visit-btn">＋ Add visit</button>
+  </div>
+
+  <div class="resort" data-return="yes" data-visits="2">
+    <div class="resort-header">
+      <div class="resort-name">Boyne Mountain</div>
+      <div class="resort-meta"><div class="visit-count">2 visits</div></div>
+    </div>
+    <div class="visits">
+      <div class="visit">
+        <div class="visit-date">1 Day · First visit</div>
+        <div class="notes">
+          <div class="note hl">Good conditions on a Monday.</div>
+        </div>
+      </div>
+      <div class="visit">
+        <div class="visit-date">1 Day · February 2024</div>
+        <div class="notes">
+          <div class="note hl">Only there for a Saturday afternoon. Not too crowded. Snow cover was thin.</div>
+          <div class="note bad">Tried the new 8-pack — it's chaos to get on and is probably way too big.</div>
+        </div>
+      </div>
+    </div>
+    <button class="add-visit-btn">＋ Add visit</button>
+  </div>
+
+  <div class="resort" data-return="yes" data-visits="1">
+    <div class="resort-header">
+      <div class="resort-name">Kissing Bridge</div>
+      <div class="resort-meta"><div class="visit-count">1 visit</div></div>
+    </div>
+    <div class="visits"><div class="visit">
+      <div class="visit-date">1 Day · January 2026</div>
+      <div class="notes">
+        <div class="note hl">Freezing cold Friday, snow was great, no one there.</div>
+        <div class="note">Parts of the mountain had delayed openings. Lots of traversing. Old infrastructure. Easiest pass process ever.</div>
+        <div class="note good">North side is the best area.</div>
+      </div>
+    </div></div>
+    <button class="add-visit-btn">＋ Add visit</button>
+  </div>
+
+  <div class="resort" data-return="maybe" data-visits="2">
+    <div class="resort-header">
+      <div class="resort-name">Wisp</div>
+      <div class="resort-meta"><div class="visit-count">2 visits</div></div>
+    </div>
+    <div class="visits">
+      <div class="visit">
+        <div class="visit-date">1 Day · December 2025</div>
+        <div class="notes">
+          <div class="note hl">Super cold and windy after a number of very warm days.</div>
+          <div class="note bad">Snow guns everywhere, surface was icy or man-made glue. Only about half open. Got covered in ice head to toe.</div>
+          <div class="note">Overall place seemed just ok. Could use some maintenance.</div>
+        </div>
+      </div>
+      <div class="visit">
+        <div class="visit-date">1 Day · February 2026</div>
+        <div class="notes">
+          <div class="note hl">Pretty cold but sunny. Totally open but front side closed for a race.</div>
+          <div class="note">Snow was good. Not too crowded.</div>
+        </div>
+      </div>
+    </div>
+    <button class="add-visit-btn">＋ Add visit</button>
+  </div>
+
+  <div class="resort" data-return="maybe" data-visits="1">
+    <div class="resort-header">
+      <div class="resort-name">Crystal Mountain</div>
+      <div class="resort-meta"><div class="visit-count">1 visit</div></div>
+    </div>
+    <div class="visits"><div class="visit">
+      <div class="visit-date">3 Days</div>
+      <div class="notes">
+        <div class="note hl">Really nice upkeep and resort facilities.</div>
+        <div class="note">Terrain was pretty whatever.</div>
+      </div>
+    </div></div>
+    <button class="add-visit-btn">＋ Add visit</button>
+  </div>
+
+  <div class="resort" data-return="maybe" data-visits="1">
+    <div class="resort-header">
+      <div class="resort-name">Winterplace</div>
+      <div class="resort-meta"><div class="visit-count">1 visit</div></div>
+    </div>
+    <div class="visits"><div class="visit">
+      <div class="visit-date">1 Day</div>
+      <div class="notes">
+        <div class="note hl">Good terrain gives it potential to be much higher on the list with better conditions.</div>
+        <div class="note bad">Conditions were pretty rough. White ribbons of death everywhere. Absolute Jerry fest like we have never seen before.</div>
+      </div>
+    </div></div>
+    <button class="add-visit-btn">＋ Add visit</button>
+  </div>
+
+  <div class="resort" data-return="yes" data-visits="2">
+    <div class="resort-header">
+      <div class="resort-name">The Highlands</div>
+      <div class="resort-meta"><div class="visit-count">2 visits</div></div>
+    </div>
+    <div class="visits">
+      <div class="visit">
+        <div class="visit-date">1 Day · First visit</div>
+        <div class="notes">
+          <div class="note hl">Powder and very flat cat tracks.</div>
+        </div>
+      </div>
+      <div class="visit">
+        <div class="visit-date">1 Day · February 2024</div>
+        <div class="notes">
+          <div class="note hl">Spent an afternoon on a Sunday. Nobody there. Got some decent runs in but still has a lot of flat.</div>
+          <div class="note good">New six pack is super nice — heated seats and bubble. Actually seems to be a good idea.</div>
+        </div>
+      </div>
+    </div>
+    <button class="add-visit-btn">＋ Add visit</button>
+  </div>
+
+  <div class="resort" data-return="yes" data-visits="1">
+    <div class="resort-header">
+      <div class="resort-name">Snow Trails</div>
+      <div class="resort-meta"><div class="visit-count">1 visit</div></div>
+    </div>
+    <div class="visits"><div class="visit">
+      <div class="visit-date">Many days · Season pass holder</div>
+      <div class="notes">
+        <div class="note hl">Best terrain in Ohio.</div>
+      </div>
+    </div></div>
+    <button class="add-visit-btn">＋ Add visit</button>
+  </div>
+
+  <div class="resort" data-return="yes" data-visits="1">
+    <div class="resort-header">
+      <div class="resort-name">Norway Mountain</div>
+      <div class="resort-meta"><div class="visit-count">1 visit</div></div>
+    </div>
+    <div class="visits"><div class="visit">
+      <div class="visit-date">1 Day · January 2025</div>
+      <div class="notes">
+        <div class="note hl">Very mom and pop, very friendly. Not totally open and very cold but snow was good.</div>
+        <div class="note">Terrain was fun — has some good trails and some pretty steep groomers.</div>
+      </div>
+    </div></div>
+    <button class="add-visit-btn">＋ Add visit</button>
+  </div>
+
+  <div class="resort" data-return="yes" data-visits="1">
+    <div class="resort-header">
+      <div class="resort-name">Mad River Mountain</div>
+      <div class="resort-meta"><div class="visit-count">1 visit</div></div>
+    </div>
+    <div class="visits"><div class="visit">
+      <div class="visit-date">3 Days</div>
+      <div class="notes">
+        <div class="note hl">3 days total.</div>
+      </div>
+    </div></div>
+    <button class="add-visit-btn">＋ Add visit</button>
+  </div>
+
+  <div class="resort" data-return="maybe" data-visits="1">
+    <div class="resort-header">
+      <div class="resort-name">Hidden Valley</div>
+      <div class="resort-meta"><div class="visit-count">1 visit</div></div>
+    </div>
+    <div class="visits"><div class="visit">
+      <div class="visit-date">1 Day</div>
+      <div class="notes">
+        <div class="note hl">Ok terrain. Little brother to Seven Springs.</div>
+      </div>
+    </div></div>
+    <button class="add-visit-btn">＋ Add visit</button>
+  </div>
+
+  <div class="resort" data-return="yes" data-visits="1">
+    <div class="resort-header">
+      <div class="resort-name">Boston Mills</div>
+      <div class="resort-meta"><div class="visit-count">1 visit</div></div>
+    </div>
+    <div class="visits"><div class="visit">
+      <div class="visit-date">Too many to count · Home mountain</div>
+      <div class="notes">
+        <div class="note hl">Home 😊</div>
+      </div>
+    </div></div>
+    <button class="add-visit-btn">＋ Add visit</button>
+  </div>
+
+  <div class="resort" data-return="yes" data-visits="1">
+    <div class="resort-header">
+      <div class="resort-name">Pine Mountain</div>
+      <div class="resort-meta"><div class="visit-count">1 visit</div></div>
+    </div>
+    <div class="visits"><div class="visit">
+      <div class="visit-date">1 Night · January 2025</div>
+      <div class="notes">
+        <div class="note hl">Really cold, and not totally open. Good length runs but not steep at all. Very mellow.</div>
+      </div>
+    </div></div>
+    <button class="add-visit-btn">＋ Add visit</button>
+  </div>
+
+  <div class="resort" data-return="no" data-visits="1">
+    <div class="resort-header">
+      <div class="resort-name">Mt. Brighton</div>
+      <div class="resort-meta"><div class="visit-count">1 visit</div></div>
+    </div>
+    <div class="visits"><div class="visit">
+      <div class="visit-date">1 Day</div>
+      <div class="notes">
+        <div class="note bad">Similar to Ohio resorts. Trash dump ski hill, literally.</div>
+      </div>
+    </div></div>
+    <button class="add-visit-btn">＋ Add visit</button>
+  </div>
+
+  <div class="resort" data-return="yes" data-visits="1">
+    <div class="resort-header">
+      <div class="resort-name">Brandywine</div>
+      <div class="resort-meta"><div class="visit-count">1 visit</div></div>
+    </div>
+    <div class="visits"><div class="visit">
+      <div class="visit-date">4 Days</div>
+      <div class="notes">
+        <div class="note hl">4 days total.</div>
+      </div>
+    </div></div>
+    <button class="add-visit-btn">＋ Add visit</button>
+  </div>
+
+  <div class="resort" data-return="yes" data-visits="1">
+    <div class="resort-header">
+      <div class="resort-name">Alpine Valley</div>
+      <div class="resort-meta"><div class="visit-count">1 visit</div></div>
+    </div>
+    <div class="visits"><div class="visit">
+      <div class="visit-date">1 Day</div>
+      <div class="notes">
+        <div class="note hl">Tyler's favorite.</div>
+      </div>
+    </div></div>
+    <button class="add-visit-btn">＋ Add visit</button>
+  </div>
 </main>
 </div>
 
 <div id="tab-west" class="tab-panel">
 <main id="resort-grid-west" class="resort-grid">
+  <div class="resort" data-return="yes" data-visits="1">
+    <div class="resort-header">
+      <div class="resort-name">Whistler</div>
+      <div class="resort-meta"><div class="visit-count">1 visit</div></div>
+    </div>
+    <div class="visits"><div class="visit">
+      <div class="visit-date">4 Days · January 2019</div>
+      <div class="notes">
+        <div class="note hl">Amazing terrain. So much to ski. Went with Lee and Chel.</div>
+      </div>
+    </div></div>
+    <button class="add-visit-btn">＋ Add visit</button>
+  </div>
+
+  <div class="resort" data-return="yes" data-visits="2">
+    <div class="resort-header">
+      <div class="resort-name">Big Sky</div>
+      <div class="resort-meta"><div class="visit-count">2 visits</div></div>
+    </div>
+    <div class="visits">
+      <div class="visit">
+        <div class="visit-date">3 Days · February 2023</div>
+        <div class="notes">
+          <div class="note hl">Got good snow first day. Crowds generally not too bad except some bad luck with lift issues.</div>
+          <div class="note">Tons of different terrain. Massive place. Did not ride the tram.</div>
+        </div>
+      </div>
+      <div class="visit">
+        <div class="visit-date">3 Days · February 2025</div>
+        <div class="notes">
+          <div class="note hl">Rode new tram. Cool but visibility at the top was terrible.</div>
+          <div class="note good">Had awesome snow the last day and skied a ton of trees. Great time.</div>
+          <div class="note">Stayed one night on the mountain at the Huntley. It was good.</div>
+        </div>
+      </div>
+    </div>
+    <button class="add-visit-btn">＋ Add visit</button>
+  </div>
+
+  <div class="resort" data-return="yes" data-visits="1">
+    <div class="resort-header">
+      <div class="resort-name">Mammoth</div>
+      <div class="resort-meta"><div class="visit-count">1 visit</div></div>
+    </div>
+    <div class="visits"><div class="visit">
+      <div class="visit-date">2 Days · February 2022</div>
+      <div class="notes">
+        <div class="note hl">Overall good conditions. Mountain is amazing. So big for being one large peak but has a lot of smaller sub peaks around it.</div>
+      </div>
+    </div></div>
+    <button class="add-visit-btn">＋ Add visit</button>
+  </div>
+
+  <div class="resort" data-return="yes" data-visits="1">
+    <div class="resort-header">
+      <div class="resort-name">Grand Targhee</div>
+      <div class="resort-meta"><div class="visit-count">1 visit</div></div>
+    </div>
+    <div class="visits"><div class="visit">
+      <div class="visit-date">2 Days · February 2023</div>
+      <div class="notes">
+        <div class="note hl">Best powder day ever. Mellow pitch, great layout, no people.</div>
+        <div class="note good">New Colter lift helped this place a ton.</div>
+      </div>
+    </div></div>
+    <button class="add-visit-btn">＋ Add visit</button>
+  </div>
+
+  <div class="resort" data-return="yes" data-visits="4">
+    <div class="resort-header">
+      <div class="resort-name">Winter Park</div>
+      <div class="resort-meta"><div class="visit-count">4 visits</div></div>
+    </div>
+    <div class="visits">
+      <div class="visit">
+        <div class="visit-date">2 Days · April 2019</div>
+        <div class="notes">
+          <div class="note hl">Great snow, good diversity.</div>
+        </div>
+      </div>
+      <div class="visit">
+        <div class="visit-date">3 Days · March 2020</div>
+        <div class="notes">
+          <div class="note hl">Loved the place.</div>
+        </div>
+      </div>
+      <div class="visit">
+        <div class="visit-date">1 Day · March 2024</div>
+        <div class="notes">
+          <div class="note hl">Skied on a Sunday. Pretty crowded but lift lines were not a real issue. Snow crusty in the morning but softened up.</div>
+          <div class="note bad">Grooming was very disappointing. Very little groomed, many runs still had pushed out crud from Saturday. Winter Park was previously #2 but this visit dropped it down.</div>
+        </div>
+      </div>
+      <div class="visit">
+        <div class="visit-date">2 Days · April 2025</div>
+        <div class="notes">
+          <div class="note good">Got 10 inches of fresh powder on first day. Amazing skiing. Some of the best lines we've ever skied.</div>
+        </div>
+      </div>
+    </div>
+    <button class="add-visit-btn">＋ Add visit</button>
+  </div>
+
+  <div class="resort" data-return="yes" data-visits="1">
+    <div class="resort-header">
+      <div class="resort-name">Solitude</div>
+      <div class="resort-meta"><div class="visit-count">1 visit</div></div>
+    </div>
+    <div class="visits"><div class="visit">
+      <div class="visit-date">1 Day · January 2020</div>
+      <div class="notes">
+        <div class="note hl">Powder day. Great terrain.</div>
+      </div>
+    </div></div>
+    <button class="add-visit-btn">＋ Add visit</button>
+  </div>
+
+  <div class="resort" data-return="yes" data-visits="1">
+    <div class="resort-header">
+      <div class="resort-name">Snowbird</div>
+      <div class="resort-meta"><div class="visit-count">1 visit</div></div>
+    </div>
+    <div class="visits"><div class="visit">
+      <div class="visit-date">1 Day · January 2020</div>
+      <div class="notes">
+        <div class="note hl">Cool tunnel.</div>
+      </div>
+    </div></div>
+    <button class="add-visit-btn">＋ Add visit</button>
+  </div>
+
+  <div class="resort" data-return="yes" data-visits="3">
+    <div class="resort-header">
+      <div class="resort-name">Copper Mountain</div>
+      <div class="resort-meta"><div class="visit-count">3 visits</div></div>
+    </div>
+    <div class="visits">
+      <div class="visit">
+        <div class="visit-date">1 Day · March 2020</div>
+        <div class="notes">
+          <div class="note hl">Better than expected! Conditions were great and Nora skied her first real double black.</div>
+        </div>
+      </div>
+      <div class="visit">
+        <div class="visit-date">2 Days · December 2021</div>
+        <div class="notes">
+          <div class="note hl">Early season but best conditions of the resorts we went to on this trip. First day a little crowded, second much less.</div>
+        </div>
+      </div>
+      <div class="visit">
+        <div class="visit-date">1 Day · March 2024</div>
+        <div class="notes">
+          <div class="note hl">Arrived mid-morning Friday after flying in. Conditions were great with a warm bluebird day. Skied most of the mountain.</div>
+          <div class="note good">Copper bowl is a super fun area.</div>
+        </div>
+      </div>
+    </div>
+    <button class="add-visit-btn">＋ Add visit</button>
+  </div>
+
+  <div class="resort" data-return="yes" data-visits="1">
+    <div class="resort-header">
+      <div class="resort-name">Bridger Bowl</div>
+      <div class="resort-meta"><div class="visit-count">1 visit</div></div>
+    </div>
+    <div class="visits"><div class="visit">
+      <div class="visit-date">1 Day · February 2023</div>
+      <div class="notes">
+        <div class="note hl">Way more family friendly than expected and had a great vibe. Nice bluebird day.</div>
+      </div>
+    </div></div>
+    <button class="add-visit-btn">＋ Add visit</button>
+  </div>
+
+  <div class="resort" data-return="yes" data-visits="1">
+    <div class="resort-header">
+      <div class="resort-name">Sun Valley</div>
+      <div class="resort-meta"><div class="visit-count">1 visit</div></div>
+    </div>
+    <div class="visits"><div class="visit">
+      <div class="visit-date">2 Days · March 2022</div>
+      <div class="notes">
+        <div class="note hl">Icy conditions, stuck to groomers. 40k of vert both days, demoed Stöcklis.</div>
+      </div>
+    </div></div>
+    <button class="add-visit-btn">＋ Add visit</button>
+  </div>
+
+  <div class="resort" data-return="yes" data-visits="1">
+    <div class="resort-header">
+      <div class="resort-name">Sunshine Banff</div>
+      <div class="resort-meta"><div class="visit-count">1 visit</div></div>
+    </div>
+    <div class="visits"><div class="visit">
+      <div class="visit-date">2 Days · March 2023</div>
+      <div class="notes">
+        <div class="note hl">No new snow but good coverage and good quality snow. Not crowded.</div>
+        <div class="note">Poutine was good.</div>
+      </div>
+    </div></div>
+    <button class="add-visit-btn">＋ Add visit</button>
+  </div>
+
+  <div class="resort" data-return="yes" data-visits="1">
+    <div class="resort-header">
+      <div class="resort-name">Red Mountain Resort</div>
+      <div class="resort-meta"><div class="visit-count">1 visit</div></div>
+    </div>
+    <div class="visits"><div class="visit">
+      <div class="visit-date">2 Days · January 2024</div>
+      <div class="notes">
+        <div class="note hl">Temps were warm and snow was soft. Coverage wasn't the best but most everything open and skiable. Huge place with a lot of fun runs.</div>
+        <div class="note">All lifts were pretty old fixed grips. The red chair was a wild old double chair with truss towers.</div>
+      </div>
+    </div></div>
+    <button class="add-visit-btn">＋ Add visit</button>
+  </div>
+
+  <div class="resort" data-return="yes" data-visits="2">
+    <div class="resort-header">
+      <div class="resort-name">Steamboat</div>
+      <div class="resort-meta"><div class="visit-count">2 visits</div></div>
+    </div>
+    <div class="visits">
+      <div class="visit">
+        <div class="visit-date">1 Day · March 2020</div>
+        <div class="notes">
+          <div class="note hl">Iffy conditions. Would go back.</div>
+        </div>
+      </div>
+      <div class="visit">
+        <div class="visit-date">3 Days · April 2025</div>
+        <div class="notes">
+          <div class="note hl">The week before was in the sixties. Pretty significant melt out. Got some snow while there and conditions were better than expected.</div>
+          <div class="note good">So many good trees to be had.</div>
+        </div>
+      </div>
+    </div>
+    <button class="add-visit-btn">＋ Add visit</button>
+  </div>
+
+  <div class="resort" data-return="yes" data-visits="2">
+    <div class="resort-header">
+      <div class="resort-name">Beavercreek</div>
+      <div class="resort-meta"><div class="visit-count">2 visits</div></div>
+    </div>
+    <div class="visits">
+      <div class="visit">
+        <div class="visit-date">1 Day · January 2018</div>
+        <div class="notes">
+          <div class="note hl">Freaking cookies. Technically her first black.</div>
+        </div>
+      </div>
+      <div class="visit">
+        <div class="visit-date">1 Day · December 2021</div>
+        <div class="notes">
+          <div class="note hl">Terrible conditions but FIS race which was fun.</div>
+        </div>
+      </div>
+    </div>
+    <button class="add-visit-btn">＋ Add visit</button>
+  </div>
+
+  <div class="resort" data-return="yes" data-visits="1">
+    <div class="resort-header">
+      <div class="resort-name">Jackson Hole</div>
+      <div class="resort-meta"><div class="visit-count">1 visit</div></div>
+    </div>
+    <div class="visits"><div class="visit">
+      <div class="visit-date">2 Days · February 2023</div>
+      <div class="notes">
+        <div class="note hl">Powder, amazing waffles, tracked out quickly. Tight and steep.</div>
+        <div class="note bad">Tyler had technical difficulties.</div>
+      </div>
+    </div></div>
+    <button class="add-visit-btn">＋ Add visit</button>
+  </div>
+
+  <div class="resort" data-return="yes" data-visits="1">
+    <div class="resort-header">
+      <div class="resort-name">Lake Louise</div>
+      <div class="resort-meta"><div class="visit-count">1 visit</div></div>
+    </div>
+    <div class="visits"><div class="visit">
+      <div class="visit-date">2 Days · March 2023</div>
+      <div class="notes">
+        <div class="note hl">Poor coverage in spots, icy grooms, west bowl closed but not crowded.</div>
+      </div>
+    </div></div>
+    <button class="add-visit-btn">＋ Add visit</button>
+  </div>
+
+  <div class="resort" data-return="yes" data-visits="3">
+    <div class="resort-header">
+      <div class="resort-name">A Basin</div>
+      <div class="resort-meta"><div class="visit-count">3 visits</div></div>
+    </div>
+    <div class="visits">
+      <div class="visit">
+        <div class="visit-date">1 Day · December 2021</div>
+        <div class="notes">
+          <div class="note hl">Good day but early season and only a few front side runs open.</div>
+        </div>
+      </div>
+      <div class="visit">
+        <div class="visit-date">1 Day · May 2023</div>
+        <div class="notes">
+          <div class="note hl">Great spring conditions. A lot was open but not everything. Kelli and Jacob post-wedding ski day.</div>
+        </div>
+      </div>
+      <div class="visit">
+        <div class="visit-date">1 Day · March 2024</div>
+        <div class="notes">
+          <div class="note hl">Finally got to ski the whole mountain. Pretty good conditions on most of the mountain.</div>
+          <div class="note good">Some great bumps and trees.</div>
+        </div>
+      </div>
+    </div>
+    <button class="add-visit-btn">＋ Add visit</button>
+  </div>
+
+  <div class="resort" data-return="yes" data-visits="1">
+    <div class="resort-header">
+      <div class="resort-name">Heavenly</div>
+      <div class="resort-meta"><div class="visit-count">1 visit</div></div>
+    </div>
+    <div class="visits"><div class="visit">
+      <div class="visit-date">1 Day · February 2022</div>
+      <div class="notes">
+        <div class="note hl">Friday, resort #50. Tyler would like to go back midweek.</div>
+      </div>
+    </div></div>
+    <button class="add-visit-btn">＋ Add visit</button>
+  </div>
+
+  <div class="resort" data-return="yes" data-visits="1">
+    <div class="resort-header">
+      <div class="resort-name">Palisades Tahoe</div>
+      <div class="resort-meta"><div class="visit-count">1 visit</div></div>
+    </div>
+    <div class="visits"><div class="visit">
+      <div class="visit-date">1 Day · February 2022</div>
+      <div class="notes">
+        <div class="note hl">Spring conditions, no new snow — didn't get to try a few areas.</div>
+      </div>
+    </div></div>
+    <button class="add-visit-btn">＋ Add visit</button>
+  </div>
+
+  <div class="resort" data-return="yes" data-visits="1">
+    <div class="resort-header">
+      <div class="resort-name">Breckenridge</div>
+      <div class="resort-meta"><div class="visit-count">1 visit</div></div>
+    </div>
+    <div class="visits"><div class="visit">
+      <div class="visit-date">1 Day · January 2018</div>
+      <div class="notes">
+        <div class="note hl">Nora's first day out west ever! Can be crowded.</div>
+      </div>
+    </div></div>
+    <button class="add-visit-btn">＋ Add visit</button>
+  </div>
+
+  <div class="resort" data-return="yes" data-visits="1">
+    <div class="resort-header">
+      <div class="resort-name">Alta</div>
+      <div class="resort-meta"><div class="visit-count">1 visit</div></div>
+    </div>
+    <div class="visits"><div class="visit">
+      <div class="visit-date">1 Day · January 2020</div>
+      <div class="notes">
+        <div class="note hl">Lots of traversing.</div>
+      </div>
+    </div></div>
+    <button class="add-visit-btn">＋ Add visit</button>
+  </div>
+
+  <div class="resort" data-return="yes" data-visits="1">
+    <div class="resort-header">
+      <div class="resort-name">Kirkwood</div>
+      <div class="resort-meta"><div class="visit-count">1 visit</div></div>
+    </div>
+    <div class="visits"><div class="visit">
+      <div class="visit-date">1 Day · February 2022</div>
+      <div class="notes">
+        <div class="note hl">Spring conditions. With Lee, Chel, Ben, Jeff.</div>
+      </div>
+    </div></div>
+    <button class="add-visit-btn">＋ Add visit</button>
+  </div>
+
+  <div class="resort" data-return="yes" data-visits="1">
+    <div class="resort-header">
+      <div class="resort-name">Homewood</div>
+      <div class="resort-meta"><div class="visit-count">1 visit</div></div>
+    </div>
+    <div class="visits"><div class="visit">
+      <div class="visit-date">1 Day · February 2022</div>
+      <div class="notes">
+        <div class="note hl">Best views ever. Spring conditions.</div>
+      </div>
+    </div></div>
+    <button class="add-visit-btn">＋ Add visit</button>
+  </div>
+
+  <div class="resort" data-return="yes" data-visits="1">
+    <div class="resort-header">
+      <div class="resort-name">Loveland</div>
+      <div class="resort-meta"><div class="visit-count">1 visit</div></div>
+    </div>
+    <div class="visits"><div class="visit">
+      <div class="visit-date">1 Day · May 2023</div>
+      <div class="notes">
+        <div class="note hl">Almost entirely open with very spring conditions. Cool independent vibe.</div>
+      </div>
+    </div></div>
+    <button class="add-visit-btn">＋ Add visit</button>
+  </div>
+
+  <div class="resort" data-return="yes" data-visits="1">
+    <div class="resort-header">
+      <div class="resort-name">Alpine Meadows</div>
+      <div class="resort-meta"><div class="visit-count">1 visit</div></div>
+    </div>
+    <div class="visits"><div class="visit">
+      <div class="visit-date">1 Day · February 2022</div>
+      <div class="notes">
+        <div class="note hl">Saturday, spring conditions.</div>
+      </div>
+    </div></div>
+    <button class="add-visit-btn">＋ Add visit</button>
+  </div>
+
+  <div class="resort" data-return="yes" data-visits="1">
+    <div class="resort-header">
+      <div class="resort-name">Mission Ridge</div>
+      <div class="resort-meta"><div class="visit-count">1 visit</div></div>
+    </div>
+    <div class="visits"><div class="visit">
+      <div class="visit-date">2 Days · January 2024</div>
+      <div class="notes">
+        <div class="note hl">First day rained almost the whole day. Still got to ski most of the mountain. Second day pretty clear but snow still very heavy.</div>
+        <div class="note">Was with Lee and Chelsea. Saw an inbounds avalanche.</div>
+        <div class="note">One cool bubble detachable from Europe. Rest of the lifts were super cool center post double chairs.</div>
+      </div>
+    </div></div>
+    <button class="add-visit-btn">＋ Add visit</button>
+  </div>
+
+  <div class="resort" data-return="yes" data-visits="1">
+    <div class="resort-header">
+      <div class="resort-name">Park City</div>
+      <div class="resort-meta"><div class="visit-count">1 visit</div></div>
+    </div>
+    <div class="visits"><div class="visit">
+      <div class="visit-date">1 Day · March 2022</div>
+      <div class="notes">
+        <div class="note hl">Only powder day of 21-22 season.</div>
+      </div>
+    </div></div>
+    <button class="add-visit-btn">＋ Add visit</button>
+  </div>
+
+  <div class="resort" data-return="yes" data-visits="1">
+    <div class="resort-header">
+      <div class="resort-name">Schweitzer Mountain</div>
+      <div class="resort-meta"><div class="visit-count">1 visit</div></div>
+    </div>
+    <div class="visits"><div class="visit">
+      <div class="visit-date">1 Day · February 2024</div>
+      <div class="notes">
+        <div class="note hl">Pretty warm weather leading to spring conditions. Around half the mountain open due to warm rainy weather.</div>
+        <div class="note">Super nice lifts and good mountain layout.</div>
+      </div>
+    </div></div>
+    <button class="add-visit-btn">＋ Add visit</button>
+  </div>
+
+  <div class="resort" data-return="yes" data-visits="1">
+    <div class="resort-header">
+      <div class="resort-name">Keystone</div>
+      <div class="resort-meta"><div class="visit-count">1 visit</div></div>
+    </div>
+    <div class="visits"><div class="visit">
+      <div class="visit-date">2 Days</div>
+      <div class="notes">
+        <div class="note hl">Great conditions first day. Second day was early season but still good conditions.</div>
+      </div>
+    </div></div>
+    <button class="add-visit-btn">＋ Add visit</button>
+  </div>
+
+  <div class="resort" data-return="maybe" data-visits="1">
+    <div class="resort-header">
+      <div class="resort-name">Vail</div>
+      <div class="resort-meta"><div class="visit-count">1 visit</div></div>
+    </div>
+    <div class="visits"><div class="visit">
+      <div class="visit-date">2 Days</div>
+      <div class="notes">
+        <div class="note hl">Second day was real bad. Very limited terrain open even though trail map seemed to say more was open.</div>
+        <div class="note bad">Super crowded and poor coverage.</div>
+      </div>
+    </div></div>
+    <button class="add-visit-btn">＋ Add visit</button>
+  </div>
+
+  <div class="resort" data-return="yes" data-visits="1">
+    <div class="resort-header">
+      <div class="resort-name">Deer Valley</div>
+      <div class="resort-meta"><div class="visit-count">1 visit</div></div>
+    </div>
+    <div class="visits"><div class="visit">
+      <div class="visit-date">1 Day · January 2020</div>
+      <div class="notes">
+        <div class="note hl">Groomers for days.</div>
+      </div>
+    </div></div>
+    <button class="add-visit-btn">＋ Add visit</button>
+  </div>
+
+  <div class="resort" data-return="yes" data-visits="1">
+    <div class="resort-header">
+      <div class="resort-name">Steven's Pass</div>
+      <div class="resort-meta"><div class="visit-count">1 visit</div></div>
+    </div>
+    <div class="visits"><div class="visit">
+      <div class="visit-date">1 Day · January 2019</div>
+      <div class="notes">
+        <div class="note hl">Conditions were good. Decent resort, just kinda small.</div>
+      </div>
+    </div></div>
+    <button class="add-visit-btn">＋ Add visit</button>
+  </div>
+
+  <div class="resort" data-return="yes" data-visits="1">
+    <div class="resort-header">
+      <div class="resort-name">Snowbasin</div>
+      <div class="resort-meta"><div class="visit-count">1 visit</div></div>
+    </div>
+    <div class="visits"><div class="visit">
+      <div class="visit-date">1 Day · March 2022</div>
+      <div class="notes">
+        <div class="note hl">Variable conditions. Want to go back in good conditions.</div>
+      </div>
+    </div></div>
+    <button class="add-visit-btn">＋ Add visit</button>
+  </div>
+
+  <div class="resort" data-return="yes" data-visits="1">
+    <div class="resort-header">
+      <div class="resort-name">Lookout Pass</div>
+      <div class="resort-meta"><div class="visit-count">1 visit</div></div>
+    </div>
+    <div class="visits"><div class="visit">
+      <div class="visit-date">1 Day · February 2024</div>
+      <div class="notes">
+        <div class="note hl">Snow was very crusty off groomed but more groomed runs than expected. Front part very Midwest vibe but new Eagle Peak terrain was cool.</div>
+        <div class="note">Small independent resort with decent vibe. All fixed grip lifts but seemed in good shape.</div>
+      </div>
+    </div></div>
+    <button class="add-visit-btn">＋ Add visit</button>
+  </div>
+
+  <div class="resort" data-return="maybe" data-visits="1">
+    <div class="resort-header">
+      <div class="resort-name">Northstar</div>
+      <div class="resort-meta"><div class="visit-count">1 visit</div></div>
+    </div>
+    <div class="visits"><div class="visit">
+      <div class="visit-date">1 Day · February 2022</div>
+      <div class="notes">
+        <div class="note hl">Saturday crowds.</div>
+      </div>
+    </div></div>
+    <button class="add-visit-btn">＋ Add visit</button>
+  </div>
+
+  <div class="resort" data-return="yes" data-visits="1">
+    <div class="resort-header">
+      <div class="resort-name">Snow King</div>
+      <div class="resort-meta"><div class="visit-count">1 visit</div></div>
+    </div>
+    <div class="visits"><div class="visit">
+      <div class="visit-date">1 Day · February 2023</div>
+      <div class="notes">
+        <div class="note hl">Nice local ski hill. Steep AF on upper front face.</div>
+      </div>
+    </div></div>
+    <button class="add-visit-btn">＋ Add visit</button>
+  </div>
+
+  <div class="resort" data-return="yes" data-visits="1">
+    <div class="resort-header">
+      <div class="resort-name">Granby Ranch</div>
+      <div class="resort-meta"><div class="visit-count">1 visit</div></div>
+    </div>
+    <div class="visits"><div class="visit">
+      <div class="visit-date">1 Day · April 2025</div>
+      <div class="notes">
+        <div class="note hl">Only skied for a few hours but had awesome spring skiing conditions.</div>
+        <div class="note">Place is relatively small but modern and nice. A surprising amount of real estate around it.</div>
+      </div>
+    </div></div>
+    <button class="add-visit-btn">＋ Add visit</button>
+  </div>
+
+  <div class="resort" data-return="yes" data-visits="1">
+    <div class="resort-header">
+      <div class="resort-name">Eldora</div>
+      <div class="resort-meta"><div class="visit-count">1 visit</div></div>
+    </div>
+    <div class="visits"><div class="visit">
+      <div class="visit-date">1 Day</div>
+      <div class="notes">
+        <div class="note hl">Only a few runs open, didn't get to see the far side. Smaller but has a good vibe.</div>
+      </div>
+    </div></div>
+    <button class="add-visit-btn">＋ Add visit</button>
+  </div>
+
+  <div class="resort" data-return="maybe" data-visits="1">
+    <div class="resort-header">
+      <div class="resort-name">Brighton</div>
+      <div class="resort-meta"><div class="visit-count">1 visit</div></div>
+    </div>
+    <div class="visits"><div class="visit">
+      <div class="visit-date">1 Day · January 2020</div>
+      <div class="notes">
+        <div class="note hl">Pretty meh.</div>
+      </div>
+    </div></div>
+    <button class="add-visit-btn">＋ Add visit</button>
+  </div>
+
+  <div class="resort" data-return="no" data-visits="1">
+    <div class="resort-header">
+      <div class="resort-name">Silver Mountain</div>
+      <div class="resort-meta"><div class="visit-count">1 visit</div></div>
+    </div>
+    <div class="visits"><div class="visit">
+      <div class="visit-date">1 Day · February 2024</div>
+      <div class="notes">
+        <div class="note hl">Coverage was bad and only about a third of the mountain open. Lots of rocks, trees and junk to run over.</div>
+        <div class="note">Gondola from Kellogg up to the mountain was cool but rest of the lifts were old fixed grips.</div>
+      </div>
+    </div></div>
+    <button class="add-visit-btn">＋ Add visit</button>
+  </div>
+
+  <div class="resort" data-return="no" data-visits="1">
+    <div class="resort-header">
+      <div class="resort-name">49 Degrees North</div>
+      <div class="resort-meta"><div class="visit-count">1 visit</div></div>
+    </div>
+    <div class="visits"><div class="visit">
+      <div class="visit-date">1 Day · January 2024</div>
+      <div class="notes">
+        <div class="note hl">They did not groom a single run the night before. Everything was frozen over crust and almost unskiable.</div>
+        <div class="note bad">Skied 4 runs and left. Mountain seemed like it could have been pretty cool if conditions weren't so awful.</div>
+      </div>
+    </div></div>
+    <button class="add-visit-btn">＋ Add visit</button>
+  </div>
 </main>
 </div>
 
 <footer>❄ &nbsp; Ski Resort Rankings</footer>
 
-<!-- FAB -->
-<button class="fab" id="new-resort-btn">
-  <span>＋</span> New Resort
-</button>
+<!-- FABs -->
+<div class="fab-group">
+  <button class="fab fab-secondary" id="export-btn">↓ Export</button>
+  <button class="fab fab-primary" id="new-resort-btn">＋ New Resort</button>
+</div>
 
 <!-- Add Visit Modal -->
 <div class="modal-overlay" id="visit-modal">
@@ -991,9 +2135,15 @@
       <button class="modal-close" id="visit-modal-close">✕</button>
     </div>
     <div class="modal-body">
-      <div class="field-group">
-        <div class="field-label">Date / Duration</div>
-        <input class="field-input" id="visit-date" placeholder="e.g. 1 Day · March 2026" />
+      <div class="field-group" style="display:flex;gap:12px;">
+        <div style="flex:1;">
+          <div class="field-label">Date</div>
+          <input class="field-input" id="visit-date" placeholder="e.g. March 2026" />
+        </div>
+        <div style="flex:1;">
+          <div class="field-label">Days</div>
+          <input class="field-input" id="visit-days" type="number" min="1" placeholder="e.g. 1" />
+        </div>
       </div>
       <div class="field-group">
         <div class="field-label">Notes</div>
@@ -1312,6 +2462,7 @@
     visitDateIn.value = '';
     visitNotesIn.value = '';
     document.getElementById('visit-rank').value = '';
+    document.getElementById('visit-days').value = '';
     const currentRank = card.querySelector('.rank-num') ? card.querySelector('.rank-num').textContent.trim() : '';
     document.getElementById('visit-rank').placeholder = `Current rank: ${currentRank}`;
     visitModal.classList.add('open');
@@ -1337,7 +2488,10 @@
     visitEl.className = 'visit';
     const dateEl = document.createElement('div');
     dateEl.className = 'visit-date';
-    dateEl.textContent = dateVal || 'Date TBD';
+    const daysVal = document.getElementById('visit-days').value.trim();
+    const dayLabel = daysVal ? `${daysVal} ${parseInt(daysVal) === 1 ? 'Day' : 'Days'}` : '';
+    const combined = [dayLabel, dateVal].filter(Boolean).join(' · ');
+    dateEl.textContent = combined || 'Date TBD';
     visitEl.appendChild(dateEl);
     const notesEl = document.createElement('div');
     notesEl.className = 'notes';
@@ -1423,6 +2577,19 @@
     closeResortModal();
     save();
     card.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  });
+
+  // ── Export ────────────────────────────────────────────────
+  document.getElementById('export-btn').addEventListener('click', () => {
+    const data = readAllData();
+    const json = JSON.stringify({ resorts: data }, null, 2);
+    const blob = new Blob([json], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'ski-rankings.json';
+    a.click();
+    URL.revokeObjectURL(url);
   });
 </script>
 </body>
