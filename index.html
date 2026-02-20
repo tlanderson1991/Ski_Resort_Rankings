@@ -1,0 +1,1304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ski Journal</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #1a1c2e;
+    --snow: #f0f3f7;
+    --ice: #dde5ef;
+    --blue: #1e5fa3;
+    --blue-light: #5b8ec4;
+    --accent: #e05c2a;
+    --green: #2e8b57;
+    --muted: #7a8499;
+    --card: #ffffff;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--snow);
+    color: var(--ink);
+    font-family: 'DM Sans', sans-serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      repeating-linear-gradient(-35deg, transparent, transparent 70px, rgba(30,95,163,0.035) 70px, rgba(30,95,163,0.035) 71px),
+      repeating-linear-gradient(55deg, transparent, transparent 90px, rgba(30,95,163,0.025) 90px, rgba(30,95,163,0.025) 91px);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  header {
+    position: relative;
+    z-index: 1;
+    padding: 56px 40px 36px;
+    border-bottom: 1px solid var(--ice);
+    background: linear-gradient(180deg, rgba(30,95,163,0.07) 0%, transparent 100%);
+  }
+
+  .header-inner {
+    max-width: 980px;
+    margin: 0 auto;
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 24px;
+    flex-wrap: wrap;
+  }
+
+  .tagline {
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--blue);
+    margin-bottom: 10px;
+  }
+
+  h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(40px, 5.5vw, 68px);
+    font-weight: 700;
+    line-height: 1.05;
+    letter-spacing: -1px;
+  }
+
+  h1 em { color: var(--blue); font-style: italic; }
+
+  .header-stats {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+    padding-bottom: 4px;
+  }
+
+  .stat {
+    text-align: center;
+    background: white;
+    border: 1px solid var(--ice);
+    border-radius: 10px;
+    padding: 12px 20px;
+    min-width: 76px;
+  }
+
+  .stat-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--blue);
+    line-height: 1;
+  }
+
+  .stat-label {
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-top: 4px;
+  }
+
+  .drag-hint {
+    position: relative;
+    z-index: 1;
+    max-width: 980px;
+    margin: 14px auto 0;
+    padding: 0 40px;
+    font-size: 11.5px;
+    color: var(--muted);
+  }
+
+  main {
+    position: relative;
+    z-index: 1;
+    max-width: 980px;
+    margin: 0 auto;
+    padding: 28px 40px 100px;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(420px, 1fr));
+    gap: 20px;
+    align-items: start;
+  }
+
+  .resort {
+    background: var(--card);
+    border: 1px solid var(--ice);
+    border-radius: 12px;
+    overflow: hidden;
+    transition: box-shadow 0.2s ease, transform 0.2s ease;
+    animation: fadeUp 0.5s ease both;
+    cursor: grab;
+    user-select: none;
+  }
+
+  .resort:hover { box-shadow: 0 8px 28px rgba(30,95,163,0.11); transform: translateY(-2px); }
+  .resort:active { cursor: grabbing; }
+  .resort.dragging { opacity: 0.35; box-shadow: none !important; transform: none !important; }
+  .resort.drag-over { box-shadow: 0 0 0 2px var(--blue), 0 8px 24px rgba(30,95,163,0.15) !important; transform: none !important; }
+  .resort.new-resort { animation: fadeUp 0.4s ease both; }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(18px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .resort:nth-child(1)  { animation-delay: 0.04s; }
+  .resort:nth-child(2)  { animation-delay: 0.08s; }
+  .resort:nth-child(3)  { animation-delay: 0.12s; }
+  .resort:nth-child(4)  { animation-delay: 0.16s; }
+  .resort:nth-child(5)  { animation-delay: 0.20s; }
+  .resort:nth-child(6)  { animation-delay: 0.24s; }
+  .resort:nth-child(7)  { animation-delay: 0.28s; }
+  .resort:nth-child(8)  { animation-delay: 0.32s; }
+  .resort:nth-child(9)  { animation-delay: 0.36s; }
+  .resort:nth-child(10) { animation-delay: 0.40s; }
+
+  .resort-header {
+    padding: 22px 24px 16px;
+    border-bottom: 1px solid var(--ice);
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 12px;
+  }
+
+  .resort-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 21px;
+    font-weight: 700;
+    line-height: 1.2;
+  }
+
+  .resort-meta {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 6px;
+    flex-shrink: 0;
+  }
+
+  .visit-count {
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--muted);
+    letter-spacing: 0.5px;
+    white-space: nowrap;
+  }
+
+  .badge {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.8px;
+    text-transform: uppercase;
+    padding: 3px 8px;
+    border-radius: 10px;
+    white-space: nowrap;
+  }
+
+  .badge-yes   { background: rgba(46,139,87,0.1);  color: var(--green); }
+  .badge-no    { background: rgba(224,92,42,0.1);  color: var(--accent); }
+  .badge-maybe { background: rgba(30,95,163,0.1);  color: var(--blue); }
+
+  .visits { padding: 4px 24px 0; }
+
+  .visit {
+    padding: 16px 0;
+    border-bottom: 1px solid var(--ice);
+  }
+
+  .visit:last-child { border-bottom: none; }
+
+  .visit-date {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 10.5px;
+    font-weight: 500;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--blue);
+    margin-bottom: 8px;
+  }
+
+  .visit-date::before {
+    content: '';
+    display: block;
+    width: 12px;
+    height: 1px;
+    background: var(--blue-light);
+  }
+
+  .notes { display: flex; flex-direction: column; gap: 5px; }
+
+  .note {
+    font-size: 13.5px;
+    line-height: 1.6;
+    color: #404560;
+    padding-left: 12px;
+    border-left: 2px solid var(--ice);
+  }
+
+  .note.hl   { border-left-color: var(--blue-light); color: var(--ink); }
+  .note.good { border-left-color: var(--green); color: var(--green); }
+  .note.bad  { border-left-color: var(--accent); color: var(--accent); }
+
+  .rank-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 12px;
+    font-weight: 700;
+    color: white;
+    background: var(--ink);
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    transition: background 0.2s;
+  }
+  .resort:hover .rank-num { background: var(--blue); }
+
+  .resort-name-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  /* Add visit button */
+  .add-visit-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    margin: 8px 24px 16px;
+    padding: 8px 12px;
+    font-size: 12px;
+    font-weight: 500;
+    font-family: 'DM Sans', sans-serif;
+    color: var(--blue);
+    background: rgba(30,95,163,0.05);
+    border: 1px dashed rgba(30,95,163,0.3);
+    border-radius: 8px;
+    cursor: pointer;
+    width: calc(100% - 48px);
+    transition: all 0.15s ease;
+  }
+  .add-visit-btn:hover { background: rgba(30,95,163,0.1); border-color: var(--blue); }
+
+  /* FAB */
+  .fab {
+    position: fixed;
+    bottom: 32px;
+    right: 32px;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--blue);
+    color: white;
+    border: none;
+    border-radius: 28px;
+    padding: 14px 22px;
+    font-size: 13px;
+    font-weight: 600;
+    font-family: 'DM Sans', sans-serif;
+    cursor: pointer;
+    box-shadow: 0 4px 20px rgba(30,95,163,0.4);
+    transition: all 0.2s ease;
+  }
+  .fab:hover { background: #1a4f8a; transform: translateY(-2px); box-shadow: 0 6px 28px rgba(30,95,163,0.5); }
+
+  /* Modal */
+  .modal-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(20,22,40,0.5);
+    backdrop-filter: blur(4px);
+    z-index: 200;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+  }
+  .modal-overlay.open { display: flex; }
+
+  .modal {
+    background: white;
+    border-radius: 16px;
+    width: 100%;
+    max-width: 480px;
+    box-shadow: 0 20px 60px rgba(20,22,40,0.2);
+    animation: modalIn 0.2s ease;
+  }
+
+  @keyframes modalIn {
+    from { opacity: 0; transform: translateY(14px) scale(0.98); }
+    to   { opacity: 1; transform: translateY(0) scale(1); }
+  }
+
+  .modal-header {
+    padding: 24px 28px 16px;
+    border-bottom: 1px solid var(--ice);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .modal-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 20px;
+    font-weight: 700;
+  }
+
+  .modal-subtitle {
+    font-size: 12px;
+    color: var(--muted);
+    margin-top: 2px;
+  }
+
+  .modal-close {
+    background: none;
+    border: none;
+    font-size: 22px;
+    color: var(--muted);
+    cursor: pointer;
+    padding: 2px 8px;
+    border-radius: 6px;
+    line-height: 1;
+    transition: background 0.15s;
+  }
+  .modal-close:hover { background: var(--snow); color: var(--ink); }
+
+  .modal-body { padding: 20px 28px 8px; display: flex; flex-direction: column; gap: 14px; }
+
+  .field-group { display: flex; flex-direction: column; }
+
+  .field-label {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 5px;
+  }
+
+  .field-input, .field-textarea, .field-select {
+    width: 100%;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    color: var(--ink);
+    background: var(--snow);
+    border: 1px solid var(--ice);
+    border-radius: 8px;
+    padding: 9px 12px;
+    outline: none;
+    transition: border-color 0.15s;
+    resize: vertical;
+  }
+  .field-input:focus, .field-textarea:focus, .field-select:focus { border-color: var(--blue); background: white; }
+  .field-textarea { min-height: 100px; }
+
+  .field-hint {
+    font-size: 11px;
+    color: var(--muted);
+    margin-top: 4px;
+  }
+
+  .modal-footer {
+    padding: 16px 28px 24px;
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end;
+  }
+
+  .btn-cancel {
+    background: none;
+    border: 1px solid var(--ice);
+    border-radius: 8px;
+    padding: 9px 18px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--muted);
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .btn-cancel:hover { border-color: var(--muted); color: var(--ink); }
+
+  .btn-save {
+    background: var(--blue);
+    border: none;
+    border-radius: 8px;
+    padding: 9px 20px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    color: white;
+    cursor: pointer;
+    transition: background 0.15s;
+  }
+  .btn-save:hover { background: #1a4f8a; }
+
+  footer {
+    position: relative;
+    z-index: 1;
+    text-align: center;
+    padding: 28px;
+    font-size: 12px;
+    color: var(--muted);
+    letter-spacing: 1px;
+    border-top: 1px solid var(--ice);
+  }
+
+  @media (max-width: 640px) {
+    header { padding: 36px 20px 28px; }
+    main { padding: 24px 16px 100px; grid-template-columns: 1fr; }
+    .resort-header { padding: 18px 18px 14px; }
+    .visits { padding: 4px 18px 0; }
+    .add-visit-btn { margin: 8px 18px 14px; width: calc(100% - 36px); }
+    .drag-hint { padding: 0 20px; }
+    .fab { bottom: 20px; right: 20px; padding: 12px 18px; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <div>
+      <div class="tagline">❄ Personal Ski Journal</div>
+      <h1>On the <em>Mountain</em></h1>
+    </div>
+    <div class="header-stats">
+      <div class="stat"><div class="stat-num" id="resort-count">22</div><div class="stat-label">Resorts</div></div>
+      <div class="stat"><div class="stat-num" id="days-count">27+</div><div class="stat-label">Days</div></div>
+      <div class="stat"><div class="stat-num" id="yes-count">—</div><div class="stat-label">Would Return</div></div>
+    </div>
+  </div>
+</header>
+
+<div class="drag-hint">⠿ Drag cards to reorder rankings</div>
+
+<main id="resort-grid">
+
+  <div class="resort" data-return="yes" data-visits="1">
+    <div class="resort-header">
+      <div class="resort-name">Saddleback Mountain</div>
+      <div class="resort-meta"><div class="visit-count">1 visit</div></div>
+    </div>
+    <div class="visits"><div class="visit">
+      <div class="visit-date">1 Day · March 2025</div>
+      <div class="notes">
+        <div class="note hl">Pretty cold but bluebird and sunny. Awesome flowy groomers with great snow.</div>
+        <div class="note">Trees were great even though the snow was a little crusty and skied out.</div>
+        <div class="note">Views from the top were amazing. Lifts were new and modern. Lodge was nice.</div>
+        <div class="note">Almost nobody there.</div>
+      </div>
+    </div></div>
+    <button class="add-visit-btn">＋ Add visit</button>
+  </div>
+
+  <div class="resort" data-return="yes" data-visits="1">
+    <div class="resort-header">
+      <div class="resort-name">Sugarloaf</div>
+      <div class="resort-meta"><div class="visit-count">1 visit</div></div>
+    </div>
+    <div class="visits"><div class="visit">
+      <div class="visit-date">1 Day · March 2025</div>
+      <div class="notes">
+        <div class="note hl">Good conditions but could have used some fresh snow. Coverage was decent.</div>
+        <div class="note">Trees were kinda hard to find but good once located — snow was skied out though.</div>
+        <div class="note">Surprising amount of groomers and lack of bump runs.</div>
+        <div class="note">Overall mountain was steeper and bigger than expected.</div>
+      </div>
+    </div></div>
+    <button class="add-visit-btn">＋ Add visit</button>
+  </div>
+
+  <div class="resort" data-return="no" data-visits="3">
+    <div class="resort-header">
+      <div class="resort-name">Jay Peak</div>
+      <div class="resort-meta">
+        <div class="visit-count">3 visits</div>
+        <span class="badge badge-no">Wind jinx</span>
+      </div>
+    </div>
+    <div class="visits">
+      <div class="visit">
+        <div class="visit-date">1 Day · January 2021</div>
+        <div class="notes">
+          <div class="note hl">Great conditions but windy. Large portion on wind hold. Tram was closed.</div>
+        </div>
+      </div>
+      <div class="visit">
+        <div class="visit-date">1 Day · March 2025</div>
+        <div class="notes">
+          <div class="note hl">Very cold, very windy. Only Beinvene quad open on upper mountain.</div>
+          <div class="note">Snow was really good. Glades were the only escape from the wind.</div>
+          <div class="note bad">Probably won't go back soon — wind hold both times.</div>
+        </div>
+      </div>
+      <div class="visit">
+        <div class="visit-date">1 Day · February 2026</div>
+        <div class="notes">
+          <div class="note hl">Whole mountain totally open. Few days after a big storm.</div>
+          <div class="note">Crusty on groomers, good in the trees. Tram open but line too long all day.</div>
+        </div>
+      </div>
+    </div>
+    <button class="add-visit-btn">＋ Add visit</button>
+  </div>
+
+  <div class="resort" data-return="maybe" data-visits="1">
+    <div class="resort-header">
+      <div class="resort-name">Mount Sunapee</div>
+      <div class="resort-meta">
+        <div class="visit-count">1 visit</div>
+        <span class="badge badge-maybe">If convenient</span>
+      </div>
+    </div>
+    <div class="visits"><div class="visit">
+      <div class="visit-date">1 Day · January 2021</div>
+      <div class="notes">
+        <div class="note hl">Beautiful bluebird day with wonderful groomers. Mellow glade runs.</div>
+        <div class="note">If Nora and Tyler were to create their own ski resort, this would be it.</div>
+      </div>
+    </div></div>
+    <button class="add-visit-btn">＋ Add visit</button>
+  </div>
+
+  <div class="resort" data-return="yes" data-visits="1">
+    <div class="resort-header">
+      <div class="resort-name">Stowe Mountain</div>
+      <div class="resort-meta">
+        <div class="visit-count">1 visit</div>
+        <span class="badge badge-yes">✓ Return</span>
+      </div>
+    </div>
+    <div class="visits"><div class="visit">
+      <div class="visit-date">1 Day · January 2021</div>
+      <div class="notes">
+        <div class="note hl">Nice day with good conditions. Long runs off almost all chairlifts. Good tree runs.</div>
+        <div class="note">Very long lift lines at the main express quad and gondola.</div>
+      </div>
+    </div></div>
+    <button class="add-visit-btn">＋ Add visit</button>
+  </div>
+
+  <div class="resort" data-return="yes" data-visits="1">
+    <div class="resort-header">
+      <div class="resort-name">Titus Mountain</div>
+      <div class="resort-meta"><div class="visit-count">1 visit</div></div>
+    </div>
+    <div class="visits"><div class="visit">
+      <div class="visit-date">1 Day · January 2026</div>
+      <div class="notes">
+        <div class="note hl">Great conditions but cold. Saturday with no crowds — found plenty of fresh snow a week after a storm.</div>
+        <div class="note">Culverts were interesting, bridge was fun. Good grooming and good trees.</div>
+      </div>
+    </div></div>
+    <button class="add-visit-btn">＋ Add visit</button>
+  </div>
+
+  <div class="resort" data-return="yes" data-visits="1">
+    <div class="resort-header">
+      <div class="resort-name">Whiteface</div>
+      <div class="resort-meta"><div class="visit-count">1 visit</div></div>
+    </div>
+    <div class="visits"><div class="visit">
+      <div class="visit-date">1 Day · February 2026</div>
+      <div class="notes">
+        <div class="note hl">Mountain has a hell of a presence. Chilly to start but a beautiful bluebird day. Almost no crowds.</div>
+        <div class="note">Mountain mostly open except area with downhill training going on.</div>
+        <div class="note">Snow very crusty on groomers, a bit thin in the trees. Very steep at upper mountain.</div>
+        <div class="note good">Nora skied her first Olympic downhill trail.</div>
+      </div>
+    </div></div>
+    <button class="add-visit-btn">＋ Add visit</button>
+  </div>
+
+  <div class="resort" data-return="yes" data-visits="2">
+    <div class="resort-header">
+      <div class="resort-name">Killington</div>
+      <div class="resort-meta">
+        <div class="visit-count">2 visits</div>
+        <span class="badge badge-yes">✓ Return</span>
+      </div>
+    </div>
+    <div class="visits">
+      <div class="visit">
+        <div class="visit-date">2 Days · 2019</div>
+        <div class="notes">
+          <div class="note hl">Rainy warm conditions. 75% of mountain open.</div>
+        </div>
+      </div>
+      <div class="visit">
+        <div class="visit-date">2 Days · November 2023</div>
+        <div class="notes">
+          <div class="note hl">Early season conditions but decent coverage. Attended women's GS and Slalom FIS race.</div>
+          <div class="note good">Watched Mikaela win her 90th race. Was a ton of fun. Will go back again.</div>
+        </div>
+      </div>
+    </div>
+    <button class="add-visit-btn">＋ Add visit</button>
+  </div>
+
+  <div class="resort" data-return="yes" data-visits="1">
+    <div class="resort-header">
+      <div class="resort-name">Gore Mountain</div>
+      <div class="resort-meta"><div class="visit-count">1 visit</div></div>
+    </div>
+    <div class="visits"><div class="visit">
+      <div class="visit-date">1 Day · February 2026</div>
+      <div class="notes">
+        <div class="note hl">Place is huge. Main front side lifts are really long. Whole mountain open.</div>
+        <div class="note">Skied all groomers since most trees were closed or thin — looked like they'd be great with more snow.</div>
+        <div class="note">Cold but not frigid. Snow pretty good, a little crusty. Very few people.</div>
+      </div>
+    </div></div>
+    <button class="add-visit-btn">＋ Add visit</button>
+  </div>
+
+  <div class="resort" data-return="yes" data-visits="1">
+    <div class="resort-header">
+      <div class="resort-name">Sunday River</div>
+      <div class="resort-meta"><div class="visit-count">1 visit</div></div>
+    </div>
+    <div class="visits"><div class="visit">
+      <div class="visit-date">1 Day · March 2025</div>
+      <div class="notes">
+        <div class="note hl">Started dry then steady light rain. Coverage ok, snow soft and springlike.</div>
+        <div class="note">Bubble chairs made a huge difference in the rain. Jordan 8 broke down for ~20 mins.</div>
+        <div class="note">Tree and bump runs were pretty solid. Smelled like poo in a few spots.</div>
+        <div class="note">Cool place with a fun layout.</div>
+      </div>
+    </div></div>
+    <button class="add-visit-btn">＋ Add visit</button>
+  </div>
+
+  <div class="resort" data-return="yes" data-visits="1">
+    <div class="resort-header">
+      <div class="resort-name">Okemo</div>
+      <div class="resort-meta">
+        <div class="visit-count">1 visit</div>
+        <span class="badge badge-yes">✓ Return</span>
+      </div>
+    </div>
+    <div class="visits"><div class="visit">
+      <div class="visit-date">1 Day · January 2021</div>
+      <div class="notes">
+        <div class="note hl">Crusty snow but a nice day overall. Only skied groomers because of conditions.</div>
+        <div class="note">Decent looking trees we didn't get to explore.</div>
+      </div>
+    </div></div>
+    <button class="add-visit-btn">＋ Add visit</button>
+  </div>
+
+  <div class="resort" data-return="no" data-visits="1">
+    <div class="resort-header">
+      <div class="resort-name">Cannon Mountain</div>
+      <div class="resort-meta">
+        <div class="visit-count">1 visit</div>
+        <span class="badge badge-no">Probably not</span>
+      </div>
+    </div>
+    <div class="visits"><div class="visit">
+      <div class="visit-date">1 Day · January 2021</div>
+      <div class="notes">
+        <div class="note hl">Good conditions. Super local mountain vibe.</div>
+        <div class="note bad">TERRIBLE layout.</div>
+      </div>
+    </div></div>
+    <button class="add-visit-btn">＋ Add visit</button>
+  </div>
+
+  <div class="resort" data-return="no" data-visits="1">
+    <div class="resort-header">
+      <div class="resort-name">Bolton Valley</div>
+      <div class="resort-meta">
+        <div class="visit-count">1 visit</div>
+        <span class="badge badge-no">Probably not</span>
+      </div>
+    </div>
+    <div class="visits"><div class="visit">
+      <div class="visit-date">1 Day · January 2021</div>
+      <div class="notes">
+        <div class="note hl">Good conditions.</div>
+        <div class="note bad">SUPER slow lifts. A lot of flat traversing areas.</div>
+      </div>
+    </div></div>
+    <button class="add-visit-btn">＋ Add visit</button>
+  </div>
+
+  <div class="resort" data-return="no" data-visits="1">
+    <div class="resort-header">
+      <div class="resort-name">Mount Snow</div>
+      <div class="resort-meta">
+        <div class="visit-count">1 visit</div>
+        <span class="badge badge-no">Won't return</span>
+      </div>
+    </div>
+    <div class="visits"><div class="visit">
+      <div class="visit-date">1 Day · January 2021</div>
+      <div class="notes">
+        <div class="note hl">Great weather and decent snow but super crowded. Several lifts broke or unused.</div>
+        <div class="note bad">Way too much uphill capacity making runs even more crowded. Lacked character and was pretty vanilla.</div>
+      </div>
+    </div></div>
+    <button class="add-visit-btn">＋ Add visit</button>
+  </div>
+
+  <div class="resort" data-return="maybe" data-visits="1">
+    <div class="resort-header">
+      <div class="resort-name">Greek Peak</div>
+      <div class="resort-meta"><div class="visit-count">1 visit</div></div>
+    </div>
+    <div class="visits"><div class="visit">
+      <div class="visit-date">1 Day · March 2025</div>
+      <div class="notes">
+        <div class="note hl">Whole mountain open with decent coverage, but rained the day before so glades were washed out.</div>
+        <div class="note">Good vibes and a spunky feel — could use money for a new lift and snowmaking.</div>
+        <div class="note">Skis much bigger than the trail map leads on.</div>
+      </div>
+    </div></div>
+    <button class="add-visit-btn">＋ Add visit</button>
+  </div>
+
+  <div class="resort" data-return="yes" data-visits="1">
+    <div class="resort-header">
+      <div class="resort-name">Stratton Mountain</div>
+      <div class="resort-meta">
+        <div class="visit-count">1 visit</div>
+        <span class="badge badge-yes">✓ For sure</span>
+      </div>
+    </div>
+    <div class="visits"><div class="visit">
+      <div class="visit-date">1 Day · November 2023</div>
+      <div class="notes">
+        <div class="note hl">Good early season snow but only ~5 trails open. Trails that were open were fun with good flow.</div>
+        <div class="note">Nothing very steep — seemed pretty mellow.</div>
+      </div>
+    </div></div>
+    <button class="add-visit-btn">＋ Add visit</button>
+  </div>
+
+  <div class="resort" data-return="yes" data-visits="1">
+    <div class="resort-header">
+      <div class="resort-name">Sugarbush</div>
+      <div class="resort-meta">
+        <div class="visit-count">1 visit</div>
+        <span class="badge badge-yes">100% return</span>
+      </div>
+    </div>
+    <div class="visits"><div class="visit">
+      <div class="visit-date">1 Day · 2019</div>
+      <div class="notes">
+        <div class="note hl">Really bad conditions. Rain and ice. Only 30% of mountain open.</div>
+        <div class="note good">Would 100% go back to see the rest of the mountain.</div>
+      </div>
+    </div></div>
+    <button class="add-visit-btn">＋ Add visit</button>
+  </div>
+
+  <div class="resort" data-return="maybe" data-visits="1">
+    <div class="resort-header">
+      <div class="resort-name">Berkshire East</div>
+      <div class="resort-meta"><div class="visit-count">1 visit</div></div>
+    </div>
+    <div class="visits"><div class="visit">
+      <div class="visit-date">1 Day · March 2025</div>
+      <div class="notes">
+        <div class="note hl">Rained all day — totally soaked by the end. Did night skiing.</div>
+        <div class="note">Snow soft but by far the dirtiest we've ever skied. Wind blew a ton of debris out of the trees.</div>
+        <div class="note">T-bar express is nice and facilities are well kept.</div>
+      </div>
+    </div></div>
+    <button class="add-visit-btn">＋ Add visit</button>
+  </div>
+
+  <div class="resort" data-return="maybe" data-visits="1">
+    <div class="resort-header">
+      <div class="resort-name">Catamount</div>
+      <div class="resort-meta"><div class="visit-count">1 visit</div></div>
+    </div>
+    <div class="visits"><div class="visit">
+      <div class="visit-date">1 Day · March 2025</div>
+      <div class="notes">
+        <div class="note hl">Rained the day before and lightly the day of. Coverage very variable and quite icy.</div>
+        <div class="note">Only one lift and a few trails open.</div>
+        <div class="note">Really nice lodge, well-maintained lifts. Good vibe and layout.</div>
+      </div>
+    </div></div>
+    <button class="add-visit-btn">＋ Add visit</button>
+  </div>
+
+  <div class="resort" data-return="yes" data-visits="1">
+    <div class="resort-header">
+      <div class="resort-name">Windham Mountain Club</div>
+      <div class="resort-meta">
+        <div class="visit-count">1 visit</div>
+        <span class="badge badge-yes">✓ Return</span>
+      </div>
+    </div>
+    <div class="visits"><div class="visit">
+      <div class="visit-date">1 Day · November 2023</div>
+      <div class="notes">
+        <div class="note hl">Opening day — two runs open, classic ribbon of death. Pretty icy and bumpy.</div>
+      </div>
+    </div></div>
+    <button class="add-visit-btn">＋ Add visit</button>
+  </div>
+
+  <div class="resort" data-return="yes" data-visits="1">
+    <div class="resort-header">
+      <div class="resort-name">Hunter Mountain</div>
+      <div class="resort-meta">
+        <div class="visit-count">1 visit</div>
+        <span class="badge badge-yes">100% return</span>
+      </div>
+    </div>
+    <div class="visits"><div class="visit">
+      <div class="visit-date">1 Day · January 2021</div>
+      <div class="notes">
+        <div class="note hl">Terrible weather. Raining with most of the mountain on wind hold. Only skied a short morning.</div>
+        <div class="note good">Would 100% go back to see the rest of the mountain.</div>
+      </div>
+    </div></div>
+    <button class="add-visit-btn">＋ Add visit</button>
+  </div>
+
+  <div class="resort" data-return="no" data-visits="1">
+    <div class="resort-header">
+      <div class="resort-name">Big Boulder</div>
+      <div class="resort-meta">
+        <div class="visit-count">1 visit</div>
+        <span class="badge badge-no">Probably not</span>
+      </div>
+    </div>
+    <div class="visits"><div class="visit">
+      <div class="visit-date">1 Day</div>
+      <div class="notes">
+        <div class="note hl">Smaller. Not much open. Very crowded.</div>
+      </div>
+    </div></div>
+    <button class="add-visit-btn">＋ Add visit</button>
+  </div>
+
+</main>
+
+<footer>❄ &nbsp; Ski Journal &nbsp; ❄ &nbsp; Northeast &amp; Beyond</footer>
+
+<!-- FAB -->
+<button class="fab" id="new-resort-btn">
+  <span>＋</span> New Resort
+</button>
+
+<!-- Add Visit Modal -->
+<div class="modal-overlay" id="visit-modal">
+  <div class="modal">
+    <div class="modal-header">
+      <div>
+        <div class="modal-title" id="visit-modal-title">Add Visit</div>
+        <div class="modal-subtitle" id="visit-modal-subtitle"></div>
+      </div>
+      <button class="modal-close" id="visit-modal-close">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="field-group">
+        <div class="field-label">Date / Duration</div>
+        <input class="field-input" id="visit-date" placeholder="e.g. 1 Day · March 2026" />
+      </div>
+      <div class="field-group">
+        <div class="field-label">Notes</div>
+        <textarea class="field-textarea" id="visit-notes" placeholder="Conditions, highlights, what stood out…"></textarea>
+        <div class="field-hint">Each line will become a separate note bullet.</div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-cancel" id="visit-cancel">Cancel</button>
+      <button class="btn-save" id="visit-save">Add Visit</button>
+    </div>
+  </div>
+</div>
+
+<!-- New Resort Modal -->
+<div class="modal-overlay" id="resort-modal">
+  <div class="modal">
+    <div class="modal-header">
+      <div>
+        <div class="modal-title">New Resort</div>
+        <div class="modal-subtitle">Added to the bottom of your list</div>
+      </div>
+      <button class="modal-close" id="resort-modal-close">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="field-group">
+        <div class="field-label">Resort Name</div>
+        <input class="field-input" id="resort-name-input" placeholder="e.g. Mad River Glen" />
+      </div>
+      <div class="field-group">
+        <div class="field-label">Date / Duration</div>
+        <input class="field-input" id="resort-date-input" placeholder="e.g. 2 Days · February 2026" />
+      </div>
+      <div class="field-group">
+        <div class="field-label">Notes</div>
+        <textarea class="field-textarea" id="resort-notes-input" placeholder="Conditions, highlights, what stood out…"></textarea>
+        <div class="field-hint">Each line will become a separate note bullet.</div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-cancel" id="resort-cancel">Cancel</button>
+      <button class="btn-save" id="resort-save">Add Resort</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  const BIN_ID  = '699871f1ae596e708f3a542e';
+  const API_KEY = '$2a$10$8QkRFjrZ/xlhurcr6itn2OmILf4WvAOJL.asFOI73CEK90.vUoC0G';
+  const BIN_URL = `https://api.jsonbin.io/v3/b/${BIN_ID}`;
+
+  const grid = document.getElementById('resort-grid');
+  let saveTimeout = null;
+
+  // ── Show a subtle save indicator ─────────────────────────
+  const saveIndicator = document.createElement('div');
+  saveIndicator.id = 'save-indicator';
+  saveIndicator.style.cssText = `
+    position: fixed; bottom: 32px; left: 32px; z-index: 100;
+    font-family: 'DM Sans', sans-serif; font-size: 12px; font-weight: 500;
+    color: #fff; background: #2e8b57; border-radius: 20px;
+    padding: 7px 14px; opacity: 0; transition: opacity 0.3s ease;
+    pointer-events: none;
+  `;
+  document.body.appendChild(saveIndicator);
+
+  function showSaved(msg) {
+    saveIndicator.textContent = msg;
+    saveIndicator.style.opacity = '1';
+    setTimeout(() => saveIndicator.style.opacity = '0', 2000);
+  }
+
+  function showSaving() {
+    saveIndicator.style.background = '#1e5fa3';
+    saveIndicator.textContent = '↑ Saving…';
+    saveIndicator.style.opacity = '1';
+  }
+
+  // ── Serialize DOM to data ─────────────────────────────────
+  function readDOM() {
+    return Array.from(grid.querySelectorAll('.resort')).map(card => {
+      const name = card.querySelector('.resort-name').textContent.trim();
+      const returnVal = card.dataset.return || 'yes';
+      const badgeEl = card.querySelector('.badge');
+      const badge = badgeEl ? { text: badgeEl.textContent.trim(), cls: badgeEl.className } : null;
+      const visits = Array.from(card.querySelectorAll('.visit')).map(v => ({
+        date: v.querySelector('.visit-date') ? v.querySelector('.visit-date').textContent.trim() : '',
+        notes: Array.from(v.querySelectorAll('.note')).map(n => ({
+          text: n.textContent.trim(),
+          cls: n.className
+        }))
+      }));
+      return { name, returnVal, badge, visits };
+    });
+  }
+
+  // ── Save to JSONBin (debounced) ───────────────────────────
+  function save() {
+    clearTimeout(saveTimeout);
+    showSaving();
+    saveTimeout = setTimeout(async () => {
+      try {
+        const data = readDOM();
+        const res = await fetch(`${BIN_URL}`, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-Master-Key': API_KEY
+          },
+          body: JSON.stringify({ resorts: data })
+        });
+        if (res.ok) {
+          saveIndicator.style.background = '#2e8b57';
+          showSaved('✓ Saved');
+        } else {
+          saveIndicator.style.background = '#e05c2a';
+          showSaved('Save failed');
+        }
+      } catch(e) {
+        saveIndicator.style.background = '#e05c2a';
+        showSaved('Offline — not saved');
+      }
+    }, 800);
+  }
+
+  // ── Load from JSONBin ─────────────────────────────────────
+  async function loadCloud() {
+    try {
+      const res = await fetch(`${BIN_URL}/latest`, {
+        headers: { 'X-Master-Key': API_KEY }
+      });
+      if (!res.ok) return null;
+      const json = await res.json();
+      const resorts = json.record?.resorts;
+      return Array.isArray(resorts) && resorts.length > 0 ? resorts : null;
+    } catch(e) { return null; }
+  }
+
+  // ── Build a card from data ────────────────────────────────
+  function buildCard(resort) {
+    const card = document.createElement('div');
+    card.className = 'resort';
+    card.dataset.return = resort.returnVal || 'yes';
+    card.dataset.visits = resort.visits.length;
+    const badgeHTML = resort.badge
+      ? `<span class="${resort.badge.cls}">${resort.badge.text}</span>` : '';
+    const visitCount = resort.visits.length;
+    const visitsHTML = resort.visits.map(v => {
+      const notesHTML = v.notes.map(n => `<div class="${n.cls}">${n.text}</div>`).join('');
+      return `<div class="visit"><div class="visit-date">${v.date}</div><div class="notes">${notesHTML}</div></div>`;
+    }).join('');
+    card.innerHTML = `
+      <div class="resort-header">
+        <div class="resort-name">${resort.name}</div>
+        <div class="resort-meta">
+          <div class="visit-count">${visitCount} ${visitCount === 1 ? 'visit' : 'visits'}</div>
+          ${badgeHTML}
+        </div>
+      </div>
+      <div class="visits">${visitsHTML}</div>
+      <button class="add-visit-btn">＋ Add visit</button>
+    `;
+    return card;
+  }
+
+  function renderAll(data) {
+    grid.innerHTML = '';
+    data.forEach(resort => {
+      const card = buildCard(resort);
+      grid.appendChild(card);
+      addRankBadge(card);
+      enableDrag(card);
+      card.querySelector('.add-visit-btn').addEventListener('click', e => {
+        e.stopPropagation();
+        openVisitModal(card);
+      });
+    });
+    updateRanks();
+  }
+
+  // ── Rank numbers ──────────────────────────────────────────
+  function updateRanks() {
+    Array.from(grid.querySelectorAll('.resort')).forEach((r, i) => {
+      const el = r.querySelector('.rank-num');
+      if (el) el.textContent = i + 1;
+    });
+    updateStats();
+  }
+
+  function addRankBadge(card) {
+    const nameDiv = card.querySelector('.resort-name');
+    if (!nameDiv || nameDiv.parentElement.classList.contains('resort-name-row')) return;
+    const rankEl = document.createElement('div');
+    rankEl.className = 'rank-num';
+    const row = document.createElement('div');
+    row.className = 'resort-name-row';
+    nameDiv.parentNode.insertBefore(row, nameDiv);
+    row.appendChild(rankEl);
+    row.appendChild(nameDiv);
+  }
+
+  // ── Stats ─────────────────────────────────────────────────
+  function updateStats() {
+    const all = grid.querySelectorAll('.resort');
+    document.getElementById('resort-count').textContent = all.length;
+    document.getElementById('yes-count').textContent =
+      Array.from(all).filter(r => r.dataset.return === 'yes').length;
+  }
+
+  // ── Bootstrap: load from cloud, fall back to baked-in HTML ─
+  (async () => {
+    const cloudData = await loadCloud();
+    if (cloudData) {
+      renderAll(cloudData);
+    } else {
+      // First run — wire up the baked-in HTML cards and save them to cloud
+      Array.from(grid.querySelectorAll('.resort')).forEach(card => {
+        addRankBadge(card);
+        enableDrag(card);
+        card.querySelector('.add-visit-btn').addEventListener('click', e => {
+          e.stopPropagation();
+          openVisitModal(card);
+        });
+      });
+      updateRanks();
+      save(); // push initial data to cloud
+    }
+  })();
+
+  // ── Drag & drop ───────────────────────────────────────────
+  let dragSrc = null;
+
+  function enableDrag(card) {
+    card.setAttribute('draggable', 'true');
+    card.addEventListener('dragstart', e => {
+      dragSrc = card;
+      setTimeout(() => card.classList.add('dragging'), 0);
+      e.dataTransfer.effectAllowed = 'move';
+    });
+    card.addEventListener('dragend', () => {
+      card.classList.remove('dragging');
+      grid.querySelectorAll('.resort').forEach(r => r.classList.remove('drag-over'));
+      updateRanks();
+      save();
+    });
+    card.addEventListener('dragover', e => {
+      e.preventDefault();
+      if (card !== dragSrc) {
+        grid.querySelectorAll('.resort').forEach(r => r.classList.remove('drag-over'));
+        card.classList.add('drag-over');
+      }
+    });
+    card.addEventListener('dragleave', () => card.classList.remove('drag-over'));
+    card.addEventListener('drop', e => {
+      e.preventDefault();
+      if (dragSrc && dragSrc !== card) {
+        const all = Array.from(grid.querySelectorAll('.resort'));
+        if (all.indexOf(dragSrc) < all.indexOf(card)) grid.insertBefore(dragSrc, card.nextSibling);
+        else grid.insertBefore(dragSrc, card);
+        updateRanks();
+        save();
+      }
+      card.classList.remove('drag-over');
+    });
+  }
+
+  // ── Visit count helper ────────────────────────────────────
+  function refreshVisitCount(card) {
+    const count = card.querySelectorAll('.visit').length;
+    const vc = card.querySelector('.visit-count');
+    if (vc) vc.textContent = count + (count === 1 ? ' visit' : ' visits');
+    card.dataset.visits = count;
+  }
+
+  // ── Add Visit modal ───────────────────────────────────────
+  const visitModal    = document.getElementById('visit-modal');
+  const visitTitle    = document.getElementById('visit-modal-title');
+  const visitSubtitle = document.getElementById('visit-modal-subtitle');
+  const visitDateIn   = document.getElementById('visit-date');
+  const visitNotesIn  = document.getElementById('visit-notes');
+  let targetCard = null;
+
+  function openVisitModal(card) {
+    targetCard = card;
+    visitTitle.textContent = 'Add Visit';
+    visitSubtitle.textContent = card.querySelector('.resort-name').textContent;
+    visitDateIn.value = '';
+    visitNotesIn.value = '';
+    visitModal.classList.add('open');
+    visitDateIn.focus();
+  }
+
+  function closeVisitModal() { visitModal.classList.remove('open'); targetCard = null; }
+
+  document.getElementById('visit-modal-close').addEventListener('click', closeVisitModal);
+  document.getElementById('visit-cancel').addEventListener('click', closeVisitModal);
+  visitModal.addEventListener('click', e => { if (e.target === visitModal) closeVisitModal(); });
+
+  document.getElementById('visit-save').addEventListener('click', () => {
+    if (!targetCard) return;
+    const dateVal  = visitDateIn.value.trim();
+    const notesVal = visitNotesIn.value.trim();
+    if (!dateVal && !notesVal) { closeVisitModal(); return; }
+    const visitsContainer = targetCard.querySelector('.visits');
+    const visitEl = document.createElement('div');
+    visitEl.className = 'visit';
+    const dateEl = document.createElement('div');
+    dateEl.className = 'visit-date';
+    dateEl.textContent = dateVal || 'Date TBD';
+    visitEl.appendChild(dateEl);
+    const notesEl = document.createElement('div');
+    notesEl.className = 'notes';
+    notesVal.split('\n').filter(l => l.trim()).forEach((line, i) => {
+      const note = document.createElement('div');
+      note.className = 'note' + (i === 0 ? ' hl' : '');
+      note.textContent = line.trim();
+      notesEl.appendChild(note);
+    });
+    visitEl.appendChild(notesEl);
+    visitsContainer.appendChild(visitEl);
+    refreshVisitCount(targetCard);
+    closeVisitModal();
+    save();
+  });
+
+  // ── New Resort modal ──────────────────────────────────────
+  const resortModal   = document.getElementById('resort-modal');
+  const resortNameIn  = document.getElementById('resort-name-input');
+  const resortDateIn  = document.getElementById('resort-date-input');
+  const resortNotesIn = document.getElementById('resort-notes-input');
+
+  function openResortModal() {
+    resortNameIn.value = ''; resortDateIn.value = ''; resortNotesIn.value = '';
+    resortModal.classList.add('open');
+    resortNameIn.focus();
+  }
+
+  function closeResortModal() { resortModal.classList.remove('open'); }
+
+  document.getElementById('new-resort-btn').addEventListener('click', openResortModal);
+  document.getElementById('resort-modal-close').addEventListener('click', closeResortModal);
+  document.getElementById('resort-cancel').addEventListener('click', closeResortModal);
+  resortModal.addEventListener('click', e => { if (e.target === resortModal) closeResortModal(); });
+
+  document.getElementById('resort-save').addEventListener('click', () => {
+    const name = resortNameIn.value.trim();
+    if (!name) { resortNameIn.focus(); return; }
+    const date  = resortDateIn.value.trim();
+    const notes = resortNotesIn.value.trim();
+    const lines = notes.split('\n').filter(l => l.trim());
+    const notesHTML = lines.map((line, i) =>
+      `<div class="note${i === 0 ? ' hl' : ''}">${line.trim()}</div>`
+    ).join('');
+    const card = document.createElement('div');
+    card.className = 'resort';
+    card.dataset.return = 'yes';
+    card.dataset.visits = '1';
+    card.innerHTML = `
+      <div class="resort-header">
+        <div class="resort-name">${name}</div>
+        <div class="resort-meta"><div class="visit-count">1 visit</div></div>
+      </div>
+      <div class="visits"><div class="visit">
+        <div class="visit-date">${date || 'Date TBD'}</div>
+        <div class="notes">${notesHTML || '<div class="note hl">No notes yet.</div>'}</div>
+      </div></div>
+      <button class="add-visit-btn">＋ Add visit</button>
+    `;
+    grid.appendChild(card);
+    addRankBadge(card);
+    enableDrag(card);
+    updateRanks();
+    card.querySelector('.add-visit-btn').addEventListener('click', e => {
+      e.stopPropagation();
+      openVisitModal(card);
+    });
+    closeResortModal();
+    save();
+    card.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  });
+</script>
+</body>
+</html>
